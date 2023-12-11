@@ -219,14 +219,14 @@ grafana_plugins: []
 
 # Dashboards from https://grafana.com/dashboards
 grafana_dashboards:
-  - dashboard_id: '4271'
-    revision_id: '3'
+  - dashboard_id: '12486'
+    revision_id: '2'
     datasource: 'Victoria'
-  - dashboard_id: '1860'
-    revision_id: '4'
-    datasource: 'Victoria'
-  - dashboard_id: '358'
+  - dashboard_id: '8171'
     revision_id: '1'
+    datasource: 'Victoria'
+  - dashboard_id: '15172'
+    revision_id: '6'
     datasource: 'Victoria'
 
 grafana_dashboards_dir: "dashboards"
