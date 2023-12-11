@@ -22,15 +22,3 @@
   hosts: server
   roles:
     - vmalert
-
-- name: Setup Alertmanager
-  become: true
-  hosts: server
-  roles:
-    - alertmanager
-
-- name: Setup Grafana
-  become: true
-  hosts: server
-  roles:
-    - grafana
