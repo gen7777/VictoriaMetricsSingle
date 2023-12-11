@@ -1,0 +1,7 @@
+# handlers file for VictoriaMetrics
+---
+- name: Restart VMalert service
+  become: true
+  ansible.builtin.service:
+    name: vic-vmalert
+    state: restarted

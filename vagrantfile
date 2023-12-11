@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+ 
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
+Vagrant.configure("2") do |config|
+ config.vm.define "controlnode" do |controlnode|
+   controlnode.vm.box = "ubuntu/jammy64"
+   controlnode.vm.hostname = "controlnode"
+   controlnode.vm.network "private_network", ip: "192.168.10.2"
+   controlnode.vm.synced_folder ".","/home/vagrant/project"
+   controlnode.vm.provision "shell", inline: <<-SHELL
+     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/#g' /etc/ssh/sshd_config
+     systemctl restart sshd
+   SHELL
+   controlnode.vm.provision "shell", inline: "apt-get update && apt-get upgrade -y"
+ end
+ # Every Vagrant development environment requires a box. You can search for
+ # boxes at https://vagrantcloud.com/search.
+ config.vm.define "node1" do |node1|
+  node1.vm.box = "ubuntu/jammy64"
+  node1.vm.hostname = "node1"
+  node1.vm.network "private_network", ip: "192.168.10.3"
+  node1.vm.provision "shell", inline: <<-SHELL
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/#g' /etc/ssh/sshd_config
+    systemctl restart sshd
+  SHELL
+  node1.vm.provision "shell", inline: "apt-get update && apt-get upgrade -y"
+ end
+ config.vm.define "node2" do |node2|
+  node2.vm.box = "ubuntu/jammy64"
+  node2.vm.hostname = "node2"
+  node2.vm.network "private_network", ip: "192.168.10.4"
+  node2.vm.provision "shell", inline: <<-SHELL
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/#g' /etc/ssh/sshd_config
+    systemctl restart sshd
+  SHELL
+  node2.vm.provision "shell", inline: "apt-get update && apt-get upgrade -y"
+ end
+end

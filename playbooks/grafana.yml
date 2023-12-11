@@ -1,0 +1,6 @@
+---
+- name: Setup VM agent
+  become: true
+  hosts: server
+  roles:
+    - grafana
