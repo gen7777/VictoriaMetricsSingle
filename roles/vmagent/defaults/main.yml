@@ -29,7 +29,16 @@ vmagent_scrape_config:
       static_configs:
         - targets:
           - "192.168.10.3:9100"
-
+    - job_name: 'pve'
+      static_configs:
+      - targets:
+        - 192.168.10.10:9221  # Proxmox VE node with PVE exporter.
+      metrics_path: /pve
+  #    params:
+  #      module: [default]
+  #      cluster: ['1']
+  #      node: ['1']
+      
           
 
 vmagent_aggregation_config: []
