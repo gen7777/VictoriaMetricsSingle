@@ -14,20 +14,37 @@
   ansible.builtin.set_fact:
     victoriametrics_systemd_version: "{{ __systemd_version.stdout_lines[0].split(' ')[-1] }}"
 
-- name: Check if PVE-exporter is installed
+- name: Check if pve-exporter is installed
   ansible.builtin.stat:
     path: /usr/share/pve_exporter/bin/pve_exporter
   changed_when: false
   check_mode: false
   register: pve_exporter_is_installed
 
-- name: Check current PVE-exporter version
+- name: Check current pve-exporter version
   ansible.builtin.command: /usr/share/pve_exporter/bin/pve_exporter --version
   changed_when: false
   failed_when: false
   check_mode: false
   register: pve_exporter_current_version
   when: pve_exporter_is_installed.stat.exists | bool
+
+- name: создание пользователя pve_exporter@pve
+  ansible.builtin.shell:
+    cmd: |
+      pveum groupadd monitoring -comment 'Monitoring group'
+      pveum aclmod / -group monitoring -role PVEAuditor
+      pveum useradd pve_exporter@pve
+      pveum usermod pve_exporter@pve -group monitoring
+    executable: /bin/bash
+  become: true
+- name: Change password with pveum
+  ansible.builtin.expect:
+    command: pveum passwd pve_exporter@pve
+    responses:
+      'Enter new password:': "{{ pve_exporter_new_pass }}"
+      'Confirm password:': "{{ pve_exporter_new_pass }}"
+  become: true
 
 - name: Install required packages
   ansible.builtin.package:

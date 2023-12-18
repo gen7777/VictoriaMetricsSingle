@@ -1,6 +1,6 @@
 ---
-- name: Setup PVE_exporter
+- name: Setup pve_exporter
   become: true
-  hosts: pve-exporter
+  hosts: pve_exporter
   roles:
-    - pve-exporter
+    - pve_exporter
