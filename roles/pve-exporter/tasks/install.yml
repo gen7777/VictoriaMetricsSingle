@@ -1,52 +1,32 @@
 ---
-- name: Create PVE-exporter system group
+- name: Create pve_exporter system group
   ansible.builtin.group:
-    name: "{{ pve-exporter_system_group }}"
+    name: "{{ pve_exporter_system_group }}"
     state: present
     system: true
-  when: pve-exporter_system_group != "root"
+  when: pve_exporter_system_group != "root"
 
-- name: Create VictoriaMetrics system user
+- name: Create pve_exporter system user
   ansible.builtin.user:
-    name: "{{ pve-exporter_system_user }}"
-    groups: "{{ pve-exporter_system_group }}"
+    name: "{{ pve_exporter_system_user }}"
+    groups: "{{ pve_exporter_system_group }}"
     append: true
     shell: /usr/sbin/nologin
     system: true
     createhome: false
-  when: PVE-exporter_system_user != "root"
-
-- name: Ensure existense of /usr/local/bin
-  ansible.builtin.file:
-    path: /usr/local/bin
-    state: directory
-    mode: 0755
+  when: pve_exporter_system_user != "root"
 
 - name: Ensure existense of PVE-exporter storage directory
   ansible.builtin.file:
-    path: "{{ PVE-exporter_data_dir }}"
+    path: "{{ pve_exporter_data_dir }}"
     state: directory
     mode: 0755
-    owner: "{{ pve-exporter_system_user }}"
-    group: "{{ pve-exporter_system_group }}"
-
-- name: Delete existing PVE-exporter version if it is different.
-  ansible.builtin.file:
-    path: /usr/share/pve_exporter/bin/pve_exporter
-    state: absent
-  when:
-    - pve-exporter_is_installed.stat.exists | bool
-    - pve-exporter_version not in PVE-exporter_current_version.stdout
-- name: Создание виртуальной среды
-  python_venv:
-    path: /usr/share/pve_exporter/venv
-    state: present
-
-- name: Активация виртуальной среды
-  shell: source /usr/share/pve_exporter/venv/bin/activate
+    owner: "{{ pve_exporter_system_user }}"
+    group: "{{ pve_exporter_system_group }}"
 
 - name: Установка пакета prometheus-pve-exporter
   ansible.builtin.pip:
     name: prometheus-pve-exporter
     virtualenv: /usr/share/pve_exporter/venv
+    virtualenv_command: source /usr/share/pve_exporter/venv/bin/activate
     state: present
