@@ -29,23 +29,6 @@
   register: pve_exporter_current_version
   when: pve_exporter_is_installed.stat.exists | bool
 
-- name: создание пользователя pve_exporter@pve
-  ansible.builtin.shell:
-    cmd: |
-      pveum groupadd monitoring -comment 'Monitoring group'
-      pveum aclmod / -group monitoring -role PVEAuditor
-      pveum useradd pve_exporter@pve
-      pveum usermod pve_exporter@pve -group monitoring
-    executable: /bin/bash
-  become: true
-- name: Change password with pveum
-  ansible.builtin.expect:
-    command: pveum passwd pve_exporter@pve
-    responses:
-      'Enter new password:': "{{ pve_exporter_new_pass }}"
-      'Confirm password:': "{{ pve_exporter_new_pass }}"
-  become: true
-
 - name: Install required packages
   ansible.builtin.package:
     name:
@@ -53,3 +36,20 @@
       - python3-pip
       - python3.11-venv
     state: present
+
+#- name: создание пользователя pve_exporter@pve
+#  ansible.builtin.shell:
+#    cmd: |
+#      pveum groupadd monitoring -comment 'Monitoring group'
+#      pveum aclmod / -group monitoring -role PVEAuditor
+#      pveum useradd pve_exporter@pve
+#      pveum usermod pve_exporter@pve -group monitoring
+#    executable: /bin/bash
+#  become: true
+
+#- name: Change password with pveum
+#  ansible.builtin.expect:
+#    command: pveum passwd pve_exporter@pve
+#    responses:
+#      (?i)password: "MySekretPa$$word"
+#  become: true
