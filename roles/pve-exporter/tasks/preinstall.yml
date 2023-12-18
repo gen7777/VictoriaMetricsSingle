@@ -1,0 +1,38 @@
+---
+- name: Assert usage of systemd as an init system
+  ansible.builtin.assert:
+    that: ansible_service_mgr == 'systemd'
+    msg: "This role only works with systemd"
+
+- name: Get systemd version
+  ansible.builtin.command: systemctl --version
+  changed_when: false
+  check_mode: false
+  register: __systemd_version
+
+- name: Set systemd version fact
+  ansible.builtin.set_fact:
+    victoriametrics_systemd_version: "{{ __systemd_version.stdout_lines[0].split(' ')[-1] }}"
+
+- name: Check if PVE-exporter is installed
+  ansible.builtin.stat:
+    path: /usr/share/pve_exporter/bin/pve_exporter
+  changed_when: false
+  check_mode: false
+  register: pve_exporter_is_installed
+
+- name: Check current PVE-exporter version
+  ansible.builtin.command: /usr/share/pve_exporter/bin/pve_exporter --version
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: pve_exporter_current_version
+  when: pve_exporter_is_installed.stat.exists | bool
+
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - python3
+      - python3-pip
+      - python3.11-venv
+    state: present

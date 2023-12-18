@@ -1,0 +1,19 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=PVE Exporter
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ pve_exporter_system_user }}
+Group={{ pve_exporter_system_group }}
+ExecStart={{ pve_exporter_binary_install_dir }}/pve_exporter \
+
+SyslogIdentifier=pve_exporter
+Restart=always
+RestartSec=1
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

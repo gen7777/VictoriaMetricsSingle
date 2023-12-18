@@ -1,0 +1,22 @@
+---
+# defaults file for pve-exporter
+pve_exporter_version: "v3.0.2"
+
+pve_exporter_platform: "{% if pve_exporter_version.replace('v', '') is version('3.0.2', '>=') %}-linux{% endif %}"
+pve_exporter_repo_url: "https://github.com/prometheus-pve/prometheus-pve-exporter"
+
+pve_exporter_system_user: "pve_exporter"
+pve_exporter_system_group: "{{ pve_exporter_system_user }}"
+pve_exporter_data_dir: "/usr/share/pve_exporter/bin/pve_exporter"
+
+pve_exporter_service_args:
+  storageDataPath: "{{ pve_exporter_data_dir }}"
+pve_exporter_binary_install_dir: "/usr/share/pve_exporter/bin/"
+  
+pve_exporter_max_open_files: 2097152
+pve_exporter_web_listen_address: "0.0.0.0:9221"
+pve_exporter_web_telemetry_path: "/pve"
+pve_exporter_enabled_collectors:
+  - systemd
+  - textfile:
+      directory: "{{ pve_exporter_textfile_dir }}"

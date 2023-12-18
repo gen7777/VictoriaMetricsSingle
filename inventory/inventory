@@ -3,3 +3,5 @@ vm-single ansible_host=192.168.10.3
 [node-exporter]
 #workstantion ansible_host=192.168.10.4
 vm-single ansible_host=192.168.10.3
+[pve-exporter]
+pve2 ansible_host=192.168.10.15

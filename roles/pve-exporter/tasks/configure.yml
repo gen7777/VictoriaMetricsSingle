@@ -1,0 +1,45 @@
+---
+- name: Copy the pve_exporter systemd service file
+  ansible.builtin.template:
+    src: pve_exporter.service.j2
+    dest: /etc/systemd/system/pve_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart pve_exporter
+
+- name: Create pve_exporter config directory
+  ansible.builtin.file:
+    path: "/etc/prometheus"
+    state: directory
+    owner: root
+    group: root
+    mode: u+rwX,g+rwX,o=rX
+
+- name: Copy the pve_exporter config file
+  ansible.builtin.template:
+    src: pve.yaml
+    dest: /etc/prometheus/pve.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart pve_exporter
+
+- name: Create textfile collector dir
+  ansible.builtin.file:
+    path: "{{ pve_exporter_textfile_dir }}"
+    state: directory
+    owner: "{{ pve_exporter_system_user }}"
+    group: "{{ pve_exporter_system_group }}"
+    mode: u+rwX,g+rwX,o=rX
+  when: pve_exporter_textfile_dir | length > 0
+
+- name: Allow node_exporter port in SELinux on RedHat OS family
+  community.general.seport:
+    ports: "{{ pve_exporter_web_listen_address.split(':')[-1] }}"
+    proto: tcp
+    setype: http_port_t
+    state: present
+  when:
+    - ansible_version.full is version_compare('2.4', '>=')
+    - ansible_selinux.status == "enabled"
