@@ -7,11 +7,11 @@ pve_exporter_repo_url: "https://github.com/prometheus-pve/prometheus-pve-exporte
 
 pve_exporter_system_user: "pve_exporter"
 pve_exporter_system_group: "{{ pve_exporter_system_user }}"
-pve_exporter_data_dir: "/usr/share/pve_exporter/bin/pve_exporter"
+pve_exporter_data_dir: "/usr/share/pve_exporter/"
 
 pve_exporter_service_args:
   storageDataPath: "{{ pve_exporter_data_dir }}"
-pve_exporter_binary_install_dir: "/usr/share/pve_exporter/bin/"
+pve_exporter_binary_install_dir: "/usr/share/pve_exporter/venv/bin/"
   
 pve_exporter_max_open_files: 2097152
 pve_exporter_web_listen_address: "0.0.0.0:9221"

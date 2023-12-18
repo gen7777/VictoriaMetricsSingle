@@ -18,8 +18,8 @@
 
 - name: Copy the pve_exporter config file
   ansible.builtin.template:
-    src: pve.yaml
-    dest: /etc/prometheus/pve.yaml
+    src: pve.yml
+    dest: /etc/prometheus/pve.yml
     owner: root
     group: root
     mode: 0644

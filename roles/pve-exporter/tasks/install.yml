@@ -16,7 +16,7 @@
     createhome: false
   when: pve_exporter_system_user != "root"
 
-- name: Ensure existense of PVE-exporter storage directory
+- name: Ensure existense of pve-exporter storage directory
   ansible.builtin.file:
     path: "{{ pve_exporter_data_dir }}"
     state: directory
@@ -24,9 +24,17 @@
     owner: "{{ pve_exporter_system_user }}"
     group: "{{ pve_exporter_system_group }}"
 
-- name: Установка пакета prometheus-pve-exporter
-  ansible.builtin.pip:
-    name: prometheus-pve-exporter
-    virtualenv: /usr/share/pve_exporter/venv
-    virtualenv_command: source /usr/share/pve_exporter/venv/bin/activate
-    state: present
+- name: создание venv среды
+  ansible.builtin.shell:
+    cmd: |
+      python3 -m venv /usr/share/pve_exporter/venv
+    executable: /bin/bash
+  become: true
+
+- name: активация venv среды
+  ansible.builtin.shell:
+    cmd: |
+      source /usr/share/pve_exporter/venv/bin/activate
+      pip install prometheus-pve-exporter
+    executable: /bin/bash
+  become: true
