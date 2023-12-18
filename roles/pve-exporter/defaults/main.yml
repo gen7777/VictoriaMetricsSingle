@@ -16,7 +16,3 @@ pve_exporter_binary_install_dir: "/usr/share/pve_exporter/venv/bin/"
 pve_exporter_max_open_files: 2097152
 pve_exporter_web_listen_address: "0.0.0.0:9221"
 pve_exporter_web_telemetry_path: "/pve"
-pve_exporter_enabled_collectors:
-  - systemd
-  - textfile:
-      directory: "{{ pve_exporter_textfile_dir }}"
