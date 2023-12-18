@@ -3,3 +3,8 @@ default:
   user: pve_exporter@pve
   password: 123qwe
   verify_ssl: false
+
+#default:
+#  user: pve_exporter@pve
+#  token_name: pve_exporter@pve!monitoring
+#  token_value: 0b4c8145-e33a-48c9-9876-2e1f9b5d119c
