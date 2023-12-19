@@ -18,10 +18,15 @@
 
 - name: Copy the pve_exporter config file
   ansible.builtin.template:
-    src: pve.yml
+    src: pve.j2
     dest: /etc/prometheus/pve.yml
     owner: root
     group: root
     mode: 0644
   notify: restart pve_exporter
 
+- name: service always started
+  ansible.builtin.systemd:
+    name: pve_exporter
+    state: started
+    enabled: yes

@@ -31,7 +31,7 @@
     executable: /bin/bash
   become: true
 
-- name: активация venv среды
+- name: активация venv среды и install prometheus-pve-exporter
   ansible.builtin.shell:
     cmd: |
       source /usr/share/pve_exporter/venv/bin/activate

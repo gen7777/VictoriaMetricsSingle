@@ -4,7 +4,8 @@
   listen: "restart pve_exporter"
   become: true
   ansible.builtin.systemd:
-    daemon_reload: true
+    daemon_reload: yes
+    enabled: yes
     name: pve_exporter
     state: restarted
   when:
