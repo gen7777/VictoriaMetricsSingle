@@ -1,0 +1,6 @@
+---
+- name: Setup VMalert
+  become: true
+  hosts: server
+  roles:
+    - vmalert
