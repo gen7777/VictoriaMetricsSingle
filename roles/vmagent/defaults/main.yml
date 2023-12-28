@@ -31,6 +31,10 @@ vmagent_scrape_config:
           - "192.168.10.3:9100"
           - "192.168.10.10:9100"
           - "192.168.0.55:9100"
+    - job_name: vic-vmalert
+      static_configs:
+        - targets:
+          - "192.168.10.3:9431"
     - job_name: 'pve'
       static_configs:
       - targets:
