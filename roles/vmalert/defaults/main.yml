@@ -120,7 +120,7 @@ vic_vm_alert_rules:
 
 #6 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: pve_uptime_seconds == 0
+        expr: pve_uptime_seconds == 0 and pve_up == 0
         for: 1h
         labels:
           severity: warning
