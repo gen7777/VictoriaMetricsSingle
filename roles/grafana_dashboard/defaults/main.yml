@@ -1,0 +1,6 @@
+---
+# defaults file for grafana_dashboards
+grafana_exporters:
+  - node-exporter
+  - openvpn-node-exporter
+  - nginx-exporter

@@ -1,0 +1,17 @@
+---
+# tasks file for grafana
+
+- name: Grafana | Install dashboards for exporters
+  copy:
+    src: "{{ item }}.json"
+    dest: "/var/lib/grafana/{{ item }}.json"
+    mode: "0755"
+  with_items: "{{ grafana_exporters }}"
+
+- name: Grafana | Activate dashboard for exporters
+  template:
+    src: "dashboard.yml.j2"
+    dest: "/etc/grafana/provisioning/dashboards/dashboard-{{ item }}.yml"
+    mode: 0755
+  with_items: "{{ grafana_exporters }}"
+  notify: restart_grafana
