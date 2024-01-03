@@ -1,0 +1,40 @@
+---
+alertmanager:
+  interval: 60s
+  servers:
+  - name: alertmanager
+    proxy: false
+    readonly: false
+    timeout: 10s
+    uri: "{{ karma_alertmanager_address }}"
+annotations:
+  actions:
+  - description
+  default:
+    hidden: true
+  hidden: []
+  keep: []
+  order: []
+  strip: []
+  visible:
+  - summary
+  - description
+filters:
+  default: []
+labels:
+  color:
+    static:
+    - job
+    - '@receiver'
+    - instance
+    unique:
+    - severity
+  keep: []
+  strip: []
+listen:
+  address: "{{ karma_web_listen_address }}"
+  port: "{{ karma_web_listen_port }}"
+  prefix: /
+log:
+  config: false
+  level: info

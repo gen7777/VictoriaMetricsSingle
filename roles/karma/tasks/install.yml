@@ -1,0 +1,30 @@
+---
+- name: Download karma binary to local folder
+  become: false
+  ansible.builtin.get_url:
+    url: "{{ karma_binary_url }}"
+    dest: "/tmp/karma-linux-{{ go_arch }}.tar.gz"
+    
+- name: Create karma installation directory
+  ansible.builtin.file:
+    path: "{{ karma_data_dir }}"
+    state: directory
+    owner: alertmanager
+    group: alertmanager
+    mode: '0755'
+
+- name: Extract karma tarball
+  become: false
+  ansible.builtin.unarchive:
+    src: "/tmp/karma-linux-{{ go_arch }}.tar.gz"
+    dest: "{{ karma_data_dir }}"
+    remote_src: yes
+    owner: alertmanager
+    group: alertmanager
+    mode: '0755'
+    creates: "{{ karma_data_dir }}karma-linux-amd64"
+
+- name: Remove karma tarball
+  ansible.builtin.file:
+    path: "/tmp/karma-linux-{{ go_arch }}.tar.gz"
+    state: absent

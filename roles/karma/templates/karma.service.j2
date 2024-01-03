@@ -1,0 +1,16 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=karma Service
+After=network.target
+
+[Service]
+User={{ karma_system_user }}
+Group={{ karma_system_group }}
+Restart=on-failure
+RestartSec=5
+WorkingDirectory={{ karma_working_dir }}
+ExecStart={{ karma_data_dir }}karma-linux-{{ go_arch }} --config.file={{ karma_config }}
+
+[Install]
+WantedBy=multi-user.target

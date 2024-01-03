@@ -1,0 +1,32 @@
+---
+- name: Check if karma is installed
+  ansible.builtin.stat:
+    path: "{{ karma_data_dir }}"
+  changed_when: false
+  check_mode: false
+  register: karma_is_installed
+
+- name: Check current karma version
+  ansible.builtin.command: "/opt/karma/karma-linux-{{ go_arch }} --version"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: karma_current_version
+  when: karma_is_installed.stat.exists | bool
+
+- name: Create karma system group
+  ansible.builtin.group:
+    name: "{{ karma_system_group }}"
+    state: present
+    system: true
+  when: karma_system_group != "root"
+
+- name: Create karma system user
+  ansible.builtin.user:
+    name: "{{ karma_system_user }}"
+    groups: "{{ karma_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+  when: karma_system_user != "root"

@@ -1,0 +1,28 @@
+---
+- name: Create karma service file
+  ansible.builtin.template:
+    src: karma.service.j2
+    dest: /etc/systemd/system/karma.service
+
+- name: Create karma configuration directory
+  ansible.builtin.file:
+    path: "{{ karma_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create karma configuration file
+  ansible.builtin.template:
+    src: karma.yml.j2
+    dest: "{{ karma_config }}"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable karma service
+  ansible.builtin.service:
+    name: karma
+    enabled: yes
+    state: started

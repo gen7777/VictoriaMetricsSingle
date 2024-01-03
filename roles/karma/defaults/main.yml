@@ -1,0 +1,21 @@
+---
+# defaults file for karma
+karma_version: "0.118"
+
+karma_repo: "prymitive/karma"
+
+karma_binary_local_dir: ""
+karma_binary_url: "https://github.com/{{ karma_repo }}/releases/download/v{{ karma_version }}/karma-linux-{{ go_arch }}.tar.gz"
+
+karma_system_user: "alertmanager"
+karma_system_group: "{{ karma_system_user }}"
+
+karma_data_dir: "/opt/karma/"
+karma_working_dir: "/var/lib/prometheus/alertmanager"
+karma_config_dir: "/etc/prometheus/"
+karma_config: "{{ karma_config_dir }}karma.yml"
+   
+karma_web_listen_address: "0.0.0.0"
+karma_web_listen_port: "8080"
+
+karma_alertmanager_address: "http://192.168.10.3:9093"

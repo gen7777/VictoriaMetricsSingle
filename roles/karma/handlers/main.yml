@@ -1,0 +1,12 @@
+---
+# handlers file for karma
+- name: Restart karma
+  listen: "restart karma"
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: karma
+    state: restarted
+  when:
+    - not ansible_check_mode
