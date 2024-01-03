@@ -3,5 +3,4 @@
   become: true
   hosts: server
   roles:
-    - grafana
     - grafana_dashboard
