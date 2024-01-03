@@ -1,6 +1,22 @@
 ---
 # defaults file for grafana_dashboards
 grafana_exporters:
-  - node-exporter
-  - openvpn-node-exporter
-  - nginx-exporter
+  - StatefulSet
+  - Node Exporter Full_
+  - Main dashboard
+  - Kubernetes Cluster
+  - Kubelet
+  - Kube Scheduler
+  - Kube api server
+  - k8s pod
+  - k8s list of pods
+  - Deployment
+  - DaemonSet
+  - CoreDNS
+  - Alarm list
+  - Node Exporter detail
+  - Nodes Simple
+  - VMalert
+  - VictoriaMetrics
+  - Proxmox
+
