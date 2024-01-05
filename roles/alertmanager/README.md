@@ -1,67 +1,40 @@
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Human-dialog-warning.svg/2000px-Human-dialog-warning.svg.png" alt="alert logo" title="alert" align="right" height="60" /></p>
+Role Name: alertmanager
+=========
 
-# Ansible Role: alertmanager
+A brief description of the role goes here.
 
-## Description
+Requirements
+------------
 
-Deploy and manage Prometheus [alertmanager](https://github.com/prometheus/alertmanager) service using ansible.
+Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
-## Requirements
+Role Variables
+--------------
 
-- Ansible >= 2.9 (It might work on previous versions, but we cannot guarantee it)
+A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
-It would be nice to have prometheus installed somewhere
+Dependencies
+------------
 
-## Role Variables
+A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
-All variables which can be overridden are stored in [defaults/main.yml](defaults/main.yml) file as well as in [meta/argument_specs.yml](meta/argument_specs.yml).
-Please refer to the [collection docs](https://prometheus-community.github.io/ansible/branch/main/alertmanager_role.html) for description and default values of the variables.
+Example Playbook
+----------------
 
-## Example
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-### Playbook
-
-```yaml
----
-  hosts: all
+- name: Setup alertmanager
+  become: true
+  hosts: alertmanager
   roles:
-    - prometheus.prometheus.alertmanager
-  vars:
-    alertmanager_version: latest
-    alertmanager_slack_api_url: "http://example.com"
-    alertmanager_receivers:
-      - name: slack
-        slack_configs:
-          - send_resolved: true
-            channel: '#alerts'
-    alertmanager_route:
-      group_by: ['alertname', 'cluster', 'service']
-      group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 3h
-      receiver: slack
-```
+    - alertmanager
 
-### Demo site
+License
+-------
 
-We provide demo site for full monitoring solution based on prometheus and grafana. Repository with code and links to running instances is [available on github](https://github.com/prometheus/demo-site) and site is hosted on [DigitalOcean](https://digitalocean.com).
+BSD
 
-## Local Testing
+Author Information
+------------------
 
-The preferred way of locally testing the role is to use Docker and [molecule](https://github.com/ansible-community/molecule) (v3.x). You will have to install Docker on your system. See "Get started" for a Docker package suitable to for your system. Running your tests is as simple as executing `molecule test`.
-
-## Continuous Integration
-
-Combining molecule and circle CI allows us to test how new PRs will behave when used with multiple ansible versions and multiple operating systems. This also allows use to create test scenarios for different role configurations. As a result we have a quite large test matrix which can take more time than local testing, so please be patient.
-
-## Contributing
-
-See [contributor guideline](CONTRIBUTING.md).
-
-## Troubleshooting
-
-See [troubleshooting](TROUBLESHOOTING.md).
-
-## License
-
-This project is licensed under MIT License. See [LICENSE](/LICENSE) for more details.
+An optional section for the role authors to include contact information, or a website (HTML is not allowed).

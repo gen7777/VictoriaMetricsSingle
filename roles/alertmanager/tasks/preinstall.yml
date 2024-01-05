@@ -1,0 +1,45 @@
+---
+- name: Check if alertmanager is installed
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  changed_when: false
+  check_mode: false
+  register: alertmanager_is_installed
+  with_items:
+    - "{{ alertmanager_config_dir }}"
+    - "{{ alertmanager_working_dir }}"
+
+- name: Create alertmanager system group
+  ansible.builtin.group:
+    name: "{{ alertmanager_system_group }}"
+    state: present
+    system: true
+  when: alertmanager_system_group != "root"
+
+- name: Create alertmanager system user
+  ansible.builtin.user:
+    name: "{{ alertmanager_system_user }}"
+    groups: "{{ alertmanager_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+  when: alertmanager_system_user != "root"
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ alertmanager_config_dir }}"
+    - "{{ alertmanager_working_dir }}"
+
+- name: owner directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ alertmanager_system_user }}"
+    group: "{{ alertmanager_system_group }}"
+    recurse: yes
+  with_items:
+    - "{{ alertmanager_config_dir }}"
+    - "{{ alertmanager_working_dir }}"

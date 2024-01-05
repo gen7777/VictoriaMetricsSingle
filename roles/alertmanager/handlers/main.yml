@@ -1,15 +1,12 @@
 ---
+# handlers file for karma
 - name: Restart alertmanager
   listen: "restart alertmanager"
   become: true
   ansible.builtin.systemd:
-    daemon_reload: true
+    daemon_reload: yes
+    enabled: yes
     name: alertmanager
     state: restarted
-
-- name: Reload alertmanager
-  listen: "reload alertmanager"
-  become: true
-  ansible.builtin.systemd:
-    name: alertmanager
-    state: reloaded
+  when:
+    - not ansible_check_mode
