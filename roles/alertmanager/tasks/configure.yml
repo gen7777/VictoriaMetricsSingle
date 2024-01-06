@@ -5,9 +5,14 @@
     dest: /etc/systemd/system/alertmanager.service
 
 - name: Create alertmanager configuration file
-  ansible.builtin.template:
-    src: alertmanager.yml.j2
-    dest: "{{ alertmanager_config }}"
+  ansible.builtin.copy:
+    src: alertmanager.yml
+    dest: "{{ alertmanager_config_dir }}"
+
+#- name: Create alertmanager configuration file
+#  ansible.builtin.template:
+#    src: alertmanager.yml.j2
+#    dest: "{{ alertmanager_config }}"
 
 - name: Reload systemd daemon
   ansible.builtin.systemd:

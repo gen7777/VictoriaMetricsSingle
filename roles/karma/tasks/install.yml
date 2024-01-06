@@ -9,8 +9,8 @@
   ansible.builtin.file:
     path: "{{ karma_data_dir }}"
     state: directory
-    owner: alertmanager
-    group: alertmanager
+    owner: "{{ karma_system_user }}"
+    group: "{{ karma_system_group }}"
     mode: '0755'
 
 - name: Extract karma tarball
@@ -19,8 +19,8 @@
     src: "/tmp/karma-linux-{{ go_arch }}.tar.gz"
     dest: "{{ karma_data_dir }}"
     remote_src: yes
-    owner: alertmanager
-    group: alertmanager
+    owner: "{{ karma_system_user }}"
+    group: "{{ karma_system_group }}"
     mode: '0755'
     creates: "{{ karma_data_dir }}karma-linux-amd64"
 

@@ -1,0 +1,37 @@
+---
+global:
+  resolve_timeout: 5m
+templates:
+  - /etc/alertmanager/*.tmpl
+receivers:
+  - name: 'null'
+  - name: 'telegram'
+    telegram_configs:
+    - api_url: https://api.telegram.org
+      send_resolved: true
+      bot_token: 6939376271:AAEp_3I0Eq4zD_QIs4efPzFeX2rklw-HsiY
+      chat_id: -1001520211719
+      message:  '{{ template "telegram.message" . }}'
+      parse_mode: 'HTML'
+route:
+  receiver: 'telegram'
+  group_by:
+    - severity
+    - alertname
+    - namespace
+  routes:
+  - receiver: 'telegram'
+    match:
+      severity: ^(none|warning|critical)$
+    repeat_interval: 24h
+    continue: true
+  - receiver: 'null'
+    match:
+      alertname: Watchdog
+    repeat_interval: 24h
+    continue: true
+  - receiver: 'null'
+    match:
+      alertname: InfoInhibitor
+    repeat_interval: 24h
+    continue: true
