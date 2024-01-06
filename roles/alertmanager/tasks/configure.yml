@@ -14,6 +14,11 @@
 #    src: alertmanager.yml.j2
 #    dest: "{{ alertmanager_config }}"
 
+- name: Create tmpl file
+  ansible.builtin.copy:
+    src: telegram.tmpl
+    dest: "{{ alertmanager_config_dir }}"
+
 - name: Reload systemd daemon
   ansible.builtin.systemd:
     daemon_reload: yes
