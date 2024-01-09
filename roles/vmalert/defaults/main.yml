@@ -111,8 +111,8 @@ vic_vm_alert_rules:
 
 #5 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
-        expr: pve_uptime_seconds{(instance="172.19.19.41:9221"} < 300 AND pve_up!=0
-        abels:
+        expr: pve_uptime_seconds{instance="172.19.19.41:9221"} < 300 AND pve_up!=0
+        labels:
           severity: warning
         annotations:
           description: '{% raw %}The virtual machine {{ $labels.id }} has been restarted {{ $labels.instance }} .{% endraw %}'
@@ -120,7 +120,7 @@ vic_vm_alert_rules:
 
 #6 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: pve_uptime_seconds{(instance="172.19.19.41:9221"} == 0 and pve_up == 0
+        expr: pve_uptime_seconds{instance="172.19.19.41:9221"} == 0 and pve_up == 0
         for: 1h
         labels:
           severity: warning
