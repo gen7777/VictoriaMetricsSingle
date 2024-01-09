@@ -53,7 +53,7 @@
 
 - name: Configure alerts config
   ansible.builtin.template:
-    src: alerts.yml.j2
+    src: alert_rules.yml
     dest: "{{ vic_vm_alert_rules_config_path }}"
     mode: 0751
     owner: "{{ vic_vm_alert_system_user }}"
