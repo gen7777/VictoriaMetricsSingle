@@ -55,7 +55,7 @@ vic_vm_alert_rules:
         annotations:
           description: '{% raw %}{{ $value }}% of the {{ $labels.job }}/{{$labels.service }} targets in {{ $labels.namespace }} namespace are down.{% endraw %}'
           summary: '{% raw %}Один или несколько targets недоступен.{% endraw %}'
-        expr: 100 * (count(up == 0) BY (datacenter,job, namespace, service) / count(up) BY (datacenter,job, namespace, service)) > 10
+        expr: 100 * (count(up == 0) BY (datacenter, job, namespace, service) / count(up) BY (datacenter, job, namespace, service)) > 10
         for: 10m
         labels:
           severity: warning
@@ -73,7 +73,7 @@ vic_vm_alert_rules:
 #1 Проверка на остаток места на файловой системе ноды осталось 5%
       - alert: GuestFilesystemAlmostOutOfSpace
         expr: ((pve_disk_usage_bytes / pve_disk_size_bytes) * 100 > 95)
-        for: 30m
+        for: 3m
         labels:
           severity: warning
         annotations:
@@ -96,7 +96,7 @@ vic_vm_alert_rules:
         labels:
           severity: warning
         annotations:
-          description:  '{% raw %}memory {{ $labels.id }} is almost gone {{ printf  $value }}  {{ $labels.instance }}{% endraw %}'
+          description:  '{% raw %}memory {{ $labels.id }} is almost gone {{ printf "%.2f"  $value }}  {{ $labels.instance }}{% endraw %}'
           summary: '{% raw %}The memory is almost gone{% endraw %}'
 
 #4 Заканчивается память на гостевой системе осталось 5% 
@@ -106,13 +106,13 @@ vic_vm_alert_rules:
         labels:
           severity: warning
         annotations:
-          description:  '{% raw %}memory {{ $labels.id }} is almost gone {{ printf  $value }}  {{ $labels.instance }}{% endraw %}'
+          description:  '{% raw %}memory {{ $labels.id }} is almost gone {{ printf "%.2f" $value }}  {{ $labels.instance }}{% endraw %}'
           summary: '{% raw %}The memory is almost gone{% endraw %}'
 
 #5 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
-        expr: pve_uptime_seconds < 300
-        labels:
+        expr: pve_uptime_seconds{(instance="172.19.19.41:9221"} < 300 AND pve_up!=0
+        abels:
           severity: warning
         annotations:
           description: '{% raw %}The virtual machine {{ $labels.id }} has been restarted {{ $labels.instance }} .{% endraw %}'
@@ -120,7 +120,7 @@ vic_vm_alert_rules:
 
 #6 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: pve_uptime_seconds == 0 and pve_up == 0
+        expr: pve_uptime_seconds{(instance="172.19.19.41:9221"} == 0 and pve_up == 0
         for: 1h
         labels:
           severity: warning
@@ -142,7 +142,7 @@ vic_vm_alert_rules:
     rules:
   #1 Проверка на остаток места на файловой системе ноды плюс прогнозирование окончания места в 24 часа
       - alert: NodeFilesystemSpaceFillingUp
-        expr: (node_filesystem_avail_bytes{fstype!="",job="node-exporter"} / node_filesystem_size_bytes{fstype!="",job="node-exporter"} * 100 < 15 and predict_linear(node_filesystem_avail_bytes{fstype!="",job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 15 and predict_linear(node_filesystem_avail_bytes{fstype!="", job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: warning
@@ -151,7 +151,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem is predicted to run out of space within the next 24 hours.{% endraw %}'
   #2 Проверка на остаток места на файловой системе ноды плюс прогнозирование окончания места в 4 часа
       - alert: NodeFilesystemSpaceFillingUp
-        expr: (node_filesystem_avail_bytes{fstype!="",job="node-exporter"} / node_filesystem_size_bytes{fstype!="",job="node-exporter"} * 100 < 10 and predict_linear(node_filesystem_avail_bytes{fstype!="",job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 10 and predict_linear(node_filesystem_avail_bytes{fstype!="", job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: critical
@@ -160,7 +160,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem is predicted to run out of space within the next 4 hours.{% endraw %}'
   #3 Проверка на остаток места на файловой системе ноды осталось 5%
       - alert: NodeFilesystemAlmostOutOfSpace
-        expr: (node_filesystem_avail_bytes{fstype!="",job="node-exporter"} / node_filesystem_size_bytes{fstype!="",job="node-exporter"} * 100 < 5 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 5 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 30m
         labels:
           severity: warning
@@ -169,7 +169,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem has less than 5% space left.{% endraw %}'
   #4 Проверка на остаток места на файловой системе ноды осталось 3%
       - alert: NodeFilesystemAlmostOutOfSpace
-        expr: (node_filesystem_avail_bytes{fstype!="",job="node-exporter"} / node_filesystem_size_bytes{fstype!="",job="node-exporter"} * 100 < 3 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 3 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 30m
         labels:
           severity: critical
@@ -178,7 +178,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem has less than 3% space left.{% endraw %}'
   #5 Проверка на остаток количество инодов  файловой системе ноды плюс прогнозирование окончания инодов в 24 часа
       - alert: NodeFilesystemFilesFillingUp
-        expr: (node_filesystem_files_free{fstype!="",job="node-exporter"} / node_filesystem_files{fstype!="",job="node-exporter"} * 100 < 40 and predict_linear(node_filesystem_files_free{fstype!="",job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 40 and predict_linear(node_filesystem_files_free{fstype!="", job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: warning
@@ -187,7 +187,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem is predicted to run out of inodes within the next 24 hours.{% endraw %}'
   #6 Проверка на остаток количество инодов  файловой системе ноды плюс прогнозирование окончания инодов в 4 часа
       - alert: NodeFilesystemFilesFillingUp
-        expr: (node_filesystem_files_free{fstype!="",job="node-exporter"} / node_filesystem_files{fstype!="",job="node-exporter"} * 100 < 20 and predict_linear(node_filesystem_files_free{fstype!="",job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 20 and predict_linear(node_filesystem_files_free{fstype!="", job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: critical
@@ -196,7 +196,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem is predicted to run out of inodes within the next 4 hours.{% endraw %}'
   #7 Проверка на остаток количество инодов  файловой системе ноды осталось 5%
       - alert: NodeFilesystemAlmostOutOfFiles
-        expr: (node_filesystem_files_free{fstype!="",job="node-exporter"} / node_filesystem_files{fstype!="",job="node-exporter"} * 100 < 5 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 5 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: warning
@@ -205,7 +205,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Filesystem has less than 5% inodes left.{% endraw %}'
   #8 Проверка на остаток количество инодов  файловой системе ноды осталось 3%
       - alert: NodeFilesystemAlmostOutOfFiles
-        expr: (node_filesystem_files_free{fstype!="",job="node-exporter"} / node_filesystem_files{fstype!="",job="node-exporter"} * 100 < 3 and node_filesystem_readonly{fstype!="",job="node-exporter"} == 0)
+        expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 3 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
           severity: critical
@@ -266,7 +266,7 @@ vic_vm_alert_rules:
           summary: '{% raw %}Clock not synchronising.{% endraw %}'
   #15 Деградировал RAID на ноде
       - alert: NodeRAIDDegraded
-        expr: node_md_disks_required{device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+)",job="node-exporter"} - ignoring (state) (node_md_disks{device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+)",job="node-exporter",state="active"}) > 0
+        expr: node_md_disks_required{device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+)", job="node-exporter"} - ignoring (state) (node_md_disks{device=~"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+)", job="node-exporter",state="active"}) > 0
         for: 15m
         labels:
           severity: critical
