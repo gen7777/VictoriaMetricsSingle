@@ -15,39 +15,6 @@ vmagent_service_args:
   "remoteWrite.tmpDataPath": /tmp/vmagent
   "remoteWrite.streamAggr.config": "{{ vmagent_config_dir }}/aggregation.yml"
 
-vmagent_scrape_config:
-  scrape_configs:
-    - job_name: vmagent
-      static_configs:
-        - targets:
-          - "localhost:8429"
-    - job_name: VM_single
-      static_configs:
-        - targets:
-          - "127.0.0.1:8428"
-    - job_name: node-exporter
-      static_configs:
-        - targets:
-          - "192.168.10.3:9100"
-          - "192.168.10.10:9100"
-          - "192.168.0.55:9100"
-    - job_name: vic-vmalert
-      static_configs:
-        - targets:
-          - "192.168.10.3:9431"
-    - job_name: 'pve'
-      static_configs:
-      - targets:
-        - 192.168.10.10:9221  # Proxmox VE node with PVE exporter.
-        - 192.168.10.15:9221  #PVE2
-        - 192.168.0.55:9221  #PVE
-      metrics_path: /pve
-  #    params:
-  #      module: [default]
-  #      cluster: ['1']
-  #      node: ['1']
-      
-          
 
 vmagent_aggregation_config: []
 

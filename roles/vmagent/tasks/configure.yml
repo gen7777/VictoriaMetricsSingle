@@ -64,7 +64,7 @@
 
 - name: Configure promscrape config
   ansible.builtin.template:
-    src: prometheus_scrape.yml.j2
+    src: scrape_configs.yml
     dest: "{{ vmagent_config_dir }}/config.yml"
     mode: 0751
     owner: "{{ vmagent_system_user }}"
