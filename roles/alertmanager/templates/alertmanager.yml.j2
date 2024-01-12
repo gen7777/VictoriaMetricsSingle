@@ -11,7 +11,8 @@ receivers:
       send_resolved: true
       bot_token: {{ bot_token }}
       chat_id: {{ chat_id }}
-      message:  '{{ template "telegram.message" .}}'
+      {% raw %}message:  '{{ template "telegram.message" .}}'
+{% endraw %}
       parse_mode: 'HTML'
 route:
   receiver: 'telegram'
