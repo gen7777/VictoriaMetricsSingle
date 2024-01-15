@@ -1,15 +1,5 @@
 ---
 groups:
-  - name: ansible managed alert rules
-    rules:
-      - alert: HostOutOfMemory
-        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
-        for: 2m
-        labels:
-          severity: warning
-        annotations:
-          summary: "{% raw %}Host out of memory (instance {{ $labels.instance }}){% endraw %}"
-          description: '{% raw %}"Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"{% endraw %}'
   - name: general.rules
     rules:
       #1 Это предупреждение, предназначенное для обеспечения работоспособности всего конвейера
@@ -57,6 +47,7 @@ groups:
         annotations:
           description: "{% raw %}Filesystem on  {{ $labels.id }}  at {{ $labels.instance }} has only {{ printf $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 5% space left.{% endraw %}"
+
       #2 Проверка на остаток места на файловой системе ноды осталось 3%
       - alert: GuestFilesystemAlmostOutOfSpace
         expr: ((pve_disk_usage_bytes / pve_disk_size_bytes) * 100 > 97)
@@ -74,7 +65,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}memory {{ $labels.id }} is almost gone {{ printf "%.2f"  $value }}  {{ $labels.instance }}{% endraw %}'
+          description: "{% raw %} memory {{ $labels.id }} is almost gone {{ printf  $value }}  {{ $labels.instance }} {% endraw %}"
           summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #4 Заканчивается память на гостевой системе осталось 5%
@@ -84,8 +75,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}memory {{ $labels.id }} is almost gone {{ printf "%.2f" $value }}  {{ $labels.instance }}{% endraw %}'
-          summary: "{% raw %}The memory is almost gone{% endraw %}"
+          description: "{% raw %}memory {{ $labels.id }} is almost gone {{ printf $value }}  {{ $labels.instance }}{% endraw %}"
+          summary: "{% raw %}The memory on {{ $labels.id }} is almost gone{% endraw %}"
 
       #5 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
@@ -94,7 +85,7 @@ groups:
           severity: warning
         annotations:
           description: "{% raw %}The virtual machine {{ $labels.id }} has been restarted {{ $labels.instance }} .{% endraw %}"
-          summary: "{% raw %}Virtual machine has restarted.{% endraw %}"
+          summary: "{% raw %}Virtual machine  {{ $labels.id }} has restarted.{% endraw %}"
 
       #6 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
@@ -104,7 +95,7 @@ groups:
           severity: warning
         annotations:
           description: "{% raw %}The virtual machine {{ $labels.id }} has been shutdown {{ $labels.instance }}.{% endraw %}"
-          summary: "{% raw %}Virtual machine has been shutdown.{% endraw %}"
+          summary: "{% raw %}Virtual machine  {{ $labels.id }} has been shutdown.{% endraw %}"
 
       #7 На гостевой виртуальной машине загрузка процессора максимальна
       - alert: GuestHighCpuUsage
@@ -113,8 +104,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}High CPU usage on guest virtual machine {{ $labels.instance }}. Current usage {{ printf "%.2f" $value }}%.{% endraw %}'
-          summary: "{% raw %}CPU usage on guest virtual machine is above the threshold.{% endraw %}"
+          description: "{% raw %}High CPU usage on guest virtual machine {{ $labels.instance }}. Current usage {{ printf $value }}%.{% endraw %}"
+          summary: "{% raw %}CPU usage on guest virtual machine {{ $labels.instance }} is above the threshold.{% endraw %}"
 
   - name: node-exporter.rules
     rules:
@@ -125,7 +116,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of space within the next 24 hours.{% endraw %}"
       #2 Проверка на остаток места на файловой системе ноды плюс прогнозирование окончания места в 4 часа
       - alert: NodeFilesystemSpaceFillingUp
@@ -134,7 +125,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up fast.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up fast.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of space within the next 4 hours.{% endraw %}"
       #3 Проверка на остаток места на файловой системе ноды осталось 5%
       - alert: NodeFilesystemAlmostOutOfSpace
@@ -143,7 +134,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %} Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.{% endraw %}'
+          description: "{% raw %} Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 5% space left.{% endraw %}"
       #4 Проверка на остаток места на файловой системе ноды осталось 3%
       - alert: NodeFilesystemAlmostOutOfSpace
@@ -152,7 +143,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
       #5 Проверка на остаток количество инодов  файловой системе ноды плюс прогнозирование окончания инодов в 24 часа
       - alert: NodeFilesystemFilesFillingUp
@@ -161,7 +152,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left and is filling up.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of inodes within the next 24 hours.{% endraw %}"
       #6 Проверка на остаток количество инодов  файловой системе ноды плюс прогнозирование окончания инодов в 4 часа
       - alert: NodeFilesystemFilesFillingUp
@@ -170,7 +161,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up fast.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left and is filling up fast.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of inodes within the next 4 hours.{% endraw %}"
       #7 Проверка на остаток количество инодов  файловой системе ноды осталось 5%
       - alert: NodeFilesystemAlmostOutOfFiles
@@ -179,7 +170,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 5% inodes left.{% endraw %}"
       #8 Проверка на остаток количество инодов  файловой системе ноды осталось 3%
       - alert: NodeFilesystemAlmostOutOfFiles
@@ -188,7 +179,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.{% endraw %}'
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% inodes left.{% endraw %}"
       #9 Сетевой интерфейс сообщает о многих ошибках получения.
       - alert: NodeNetworkReceiveErrs
@@ -197,7 +188,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} receive errors in the last two minutes {{ $labels.instance }}{% endraw %}'
+          description: "{% raw %}interface {{ $labels.device }} has encountered {{ printf  $value }} receive errors in the last two minutes {{ $labels.instance }}{% endraw %}"
           summary: "{% raw %}Network interface is reporting many receive errors.{% endraw %}"
       #10 Сетевой интерфейс сообщает о многих исходящих ошибках .
       - alert: NodeNetworkTransmitErrs
@@ -206,7 +197,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} transmit errors in the last two minutes.{% endraw %}'
+          description: "{% raw %}interface {{ $labels.device }} has encountered {{ printf  $value }} transmit errors in the last two minutes.{% endraw %}"
           summary: "{% raw %}Network interface is reporting many transmit errors.{% endraw %}"
       #11 Количество коннтреков приближается к пределу (отслеживание количества соединений) 75%
       - alert: NodeHighNumberConntrackEntriesUsed
@@ -214,7 +205,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{% raw %}of {{ $labels.exported_instance }} conntrack entries are used {{ printf "%.0f" $value }} .{% endraw %}'
+          description: "{% raw %}of {{ $labels.exported_instance }} conntrack entries are used {{ printf  $value }} .{% endraw %}"
           summary: "{% raw %}Number of conntrack are getting close to the limit.{% endraw %}"
       #12 Node Exporter не смог очистить цель. (ScrapeError)
       - alert: NodeTextFileCollectorScrapeError
@@ -259,5 +250,116 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: '{% raw %}File descriptors limit at {{ $labels.instance }} is currently at {{ printf "%.2f" $value }}%.{% endraw %}'
+          description: "{% raw %}File descriptors limit at {{ $labels.instance }} is currently at {{ printf $value }}%.{% endraw %}"
           summary: "{% raw %}Kernel is predicted to exhaust file descriptors limit soon.{% endraw %}"
+
+  - name: vm-health
+    # note the `job` filter and update accordingly to your setup
+    rules:
+      - alert: TooManyRestarts
+        expr: changes(process_start_time_seconds{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"}[15m]) > 2
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %} In {{ $labels.job }} too many restarts (instance {{ $labels.instance }}) {% endraw %}"
+          description: "{% raw %}Job {{ $labels.job }} (instance {{ $labels.instance }}) has restarted more than twice in the last 15 minutes. It might be crashlooping.{% endraw %}"
+
+      - alert: ServiceDown
+        expr: up{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %}Service {{ $labels.job }} is down on {{ $labels.instance }}{% endraw %}"
+          description: "{% raw %} {{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes.{% endraw %}"
+
+      - alert: ProcessNearFDLimits
+        expr: (process_max_fds - process_open_fds) < 100
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %} Number of free file descriptors is less than 100 for {{ $labels.job }} {{ $labels.instance }}  for the last 5m {% endraw %}"
+          description: "{% raw %} Exhausting OS file descriptors limit can cause severe degradation of the process. Consider to increase the limit as fast as possible. {% endraw %}"
+
+      - alert: TooHighMemoryUsage
+        expr: (min_over_time(process_resident_memory_anon_bytes[10m]) / vm_available_memory_bytes) > 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %} It is more than 80% of memory used by {{ $labels.job }} {{ $labels.instance }} {% endraw %}"
+          description: "{% raw %} Too high memory usage may result into multiple issues such as OOMs or degraded performance. Consider to either increase available memory or decrease the load on the process. {% endraw %}"
+
+      - alert: TooHighCPUUsage
+        expr: rate(process_cpu_seconds_total[5m]) / process_cpu_cores_available > 0.9
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %} More than 90% of CPU is used by  {{ $labels.job }} {{ $labels.instance }}  during the last 5m {% endraw %}"
+          description: "{% raw %} Too high CPU usage may be a sign of insufficient resources and make process unstable.  Consider to either increase available CPU resources or decrease the load on the process. {% endraw %}"
+
+      - alert: TooManyLogs
+        expr: sum(increase(vm_log_messages_total{level="error"}[5m])) by (job, instance) > 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} Too many logs printed for job {{ $labels.job }}  ({{ $labels.instance }}) {% endraw %}"
+          description: "{% raw %} Logging rate for job {{ $labels.job }}  ({{ $labels.instance }}) is {{ $value }} for last 15m.  Worth to check logs for specific error messages. {% endraw %}"
+
+      - alert: TooManyTSIDMisses
+        expr: sum(rate(vm_missing_tsids_for_metric_id_total[5m])) by (job, instance) > 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %} Too many TSID misses for job {{ $labels.job }} ({{ $labels.instance }}){% endraw %}"
+          description: "{% raw %} The rate of TSID misses during query lookups is too high for {{ $labels.job }} ({{ $labels.instance }}) {% endraw %}"
+
+      - alert: ConcurrentInsertsHitTheLimit
+        expr: avg_over_time(vm_concurrent_insert_current[1m]) >= vm_concurrent_insert_capacity
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} {{ $labels.job }} on instance {{ $labels.instance }} is constantly hitting concurrent inserts limit{% endraw %}"
+          description: "{% raw %} The limit of concurrent inserts on instance {{ $labels.instance }} depends on the number of CPUs. {% endraw %}"
+
+  - name: vmalert
+    rules:
+      - alert: ConfigurationReloadFailure
+        expr: vmalert_config_last_reload_successful != 1
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} Configuration reload failed for vmalert instance {{ $labels.instance }} {% endraw %}"
+          description: "{% raw %} Configuration hot-reload failed for vmalert on instance {{ $labels.instance }}. Check vmalert's logs for detailed error message. {% endraw %}"
+
+      - alert: AlertingRulesError
+        expr: sum(vmalert_alerting_rules_error) by(job, instance, group, file) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} Alerting rules are failing for vmalert instance {{ $labels.instance }}{% endraw %}"
+          description: "{% raw %} Alerting rules execution is failing for group {{ $labels.group }}. Check vmalert's logs for detailed error message. {% endraw %}"
+
+      - alert: RemoteWriteErrors
+        expr: sum(increase(vmalert_remotewrite_errors_total[5m])) by(job, instance) > 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} vmalert instance {{ $labels.instance }} is failing to push metrics to remote write URL {% endraw %}"
+          description: "{% raw %} vmalert instance {{ $labels.instance }} is failing to push metrics generated via alerting or recording rules to the configured remote write URL. Check vmalert's logs for detailed error message. {% endraw %}"
+
+      - alert: AlertmanagerErrors
+        expr: sum(increase(vmalert_alerts_send_errors_total[5m])) by(job, instance, addr) > 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %} vmalert instance {{ $labels.instance }} is failing to send notifications to Alertmanager {% endraw %}"
+          description: "{% raw %} vmalert instance {{ $labels.instance }} is failing to send alert notifications to {{ $labels.addr }}. Check vmalert's logs for detailed error message. {% endraw %}"
