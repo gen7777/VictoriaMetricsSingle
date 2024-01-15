@@ -59,23 +59,23 @@ groups:
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
 
       #3 Заканчивается память на гостевой системе осталось 10%
-      - alert: GuestMemoryAlmostOver
+      - alert: GuestMemoryAlmostOver10_proc
         expr: ((pve_memory_usage_bytes / pve_memory_size_bytes) * 100 > 90)
         for: 1h
         labels:
           severity: warning
         annotations:
-          description: "{% raw %} memory {{ $labels.id }} is almost gone {{ printf  $value }}  {{ $labels.instance }} {% endraw %}"
+          description: "{% raw %} memory {{ $labels.id }} is almost gone   {{ $labels.instance }} {% endraw %}"
           summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #4 Заканчивается память на гостевой системе осталось 5%
-      - alert: GuestMemoryAlmostOver
+      - alert: GuestMemoryAlmostOver5_proc
         expr: ((pve_memory_usage_bytes / pve_memory_size_bytes) * 100 > 95)
         for: 1h
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}memory {{ $labels.id }} is almost gone {{ printf $value }}  {{ $labels.instance }}{% endraw %}"
+          description: "{% raw %}memory {{ $labels.id }} is almost gone  {{ $labels.instance }}{% endraw %}"
           summary: "{% raw %}The memory on {{ $labels.id }} is almost gone{% endraw %}"
 
       #5 Гостевая виртуальная машина перезагружена
