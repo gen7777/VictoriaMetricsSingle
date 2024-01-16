@@ -89,7 +89,7 @@ groups:
 
       #6 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: pve_uptime_seconds{instance="172.19.19.41:9221"} == 0 and pve_up == 0
+        expr: pve_up{instance="172.19.19.41:9221"} == 0
         for: 1h
         labels:
           severity: warning
