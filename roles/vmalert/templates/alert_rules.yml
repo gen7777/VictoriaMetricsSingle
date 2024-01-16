@@ -38,19 +38,9 @@ groups:
           summary: "{% raw %}Processes experience elevated CPU throttling.{% endraw %}"
   - name: pve-exporter.rules
     rules:
-      #1 Проверка на остаток места на файловой системе ноды осталось 5%
+      #1 Проверка на остаток места на файловой системе ноды осталось 3%
       - alert: GuestFilesystemAlmostOutOfSpace
-        expr: ((pve_disk_usage_bytes / pve_disk_size_bytes) * 100 > 95)
-        for: 3m
-        labels:
-          severity: warning
-        annotations:
-          description: "{% raw %}Filesystem on  {{ $labels.id }}  at {{ $labels.instance }} has only {{ printf $value }}% available space left.{% endraw %}"
-          summary: "{% raw %}Filesystem has less than 5% space left.{% endraw %}"
-
-      #2 Проверка на остаток места на файловой системе ноды осталось 3%
-      - alert: GuestFilesystemAlmostOutOfSpace
-        expr: ((pve_disk_usage_bytes / pve_disk_size_bytes) * 100 > 97)
+        expr: ((pve_disk_usage_bytes{instance="172.19.19.41:9221"} / pve_disk_size_bytes) * 100 > 97)
         for: 30m
         labels:
           severity: critical
@@ -58,17 +48,7 @@ groups:
           description: "{% raw %}Filesystem on {{ $labels.id }} at {{ $labels.instance }} has only {{ printf $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
 
-      #3 Заканчивается память на гостевой системе осталось 10%
-      - alert: GuestMemoryAlmostOver10_proc
-        expr: ((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 90)
-        for: 1h
-        labels:
-          severity: warning
-        annotations:
-          description: "{% raw %} memory {{ $labels.id }} is almost gone   {{ $labels.instance }} {% endraw %}"
-          summary: "{% raw %}The memory is almost gone{% endraw %}"
-
-      #4 Заканчивается память на гостевой системе осталось 5%
+      #2 Заканчивается память на гостевой системе осталось 5%
       - alert: GuestMemoryAlmostOver5_proc
         expr: ((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95)
         for: 1h
@@ -78,7 +58,7 @@ groups:
           description: "{% raw %}memory {{ $labels.id }} is almost gone  {{ $labels.instance }}{% endraw %}"
           summary: "{% raw %}The memory on {{ $labels.id }} is almost gone{% endraw %}"
 
-      #5 Гостевая виртуальная машина перезагружена
+      #3 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
         expr: pve_uptime_seconds{instance="172.19.19.41:9221"} < 300 AND pve_up!=0
         labels:
@@ -87,19 +67,19 @@ groups:
           description: "{% raw %}The virtual machine {{ $labels.id }} has been restarted {{ $labels.instance }} .{% endraw %}"
           summary: "{% raw %}Virtual machine  {{ $labels.id }} has restarted.{% endraw %}"
 
-      #6 Гостевая виртуальная машина выключена
+      #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
         expr: pve_up{instance="172.19.19.41:9221"} == 0
-        for: 1h
+        for: 2h
         labels:
           severity: warning
         annotations:
           description: "{% raw %}The virtual machine {{ $labels.id }} has been shutdown {{ $labels.instance }}.{% endraw %}"
           summary: "{% raw %}Virtual machine  {{ $labels.id }} has been shutdown.{% endraw %}"
 
-      #7 На гостевой виртуальной машине загрузка процессора максимальна
+      #5 На гостевой виртуальной машине загрузка процессора максимальна
       - alert: GuestHighCpuUsage
-        expr: (pve_cpu_usage_ratio * 100) > 90
+        expr: (pve_cpu_usage_ratio{instance="172.19.19.41:9221"} * 100) > 95
         for: 30m
         labels:
           severity: critical
