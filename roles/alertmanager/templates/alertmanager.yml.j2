@@ -23,6 +23,12 @@ route:
   routes:
   - receiver: 'telegram'
     match:
+      alertname: VirtualMachineShutdown
+    repeat_interval: 48h
+    continue: true
+    
+  - receiver: 'telegram'
+    match:
       severity: ^(none|warning|critical)$
     repeat_interval: 24h
     continue: true
