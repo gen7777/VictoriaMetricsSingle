@@ -60,7 +60,7 @@ groups:
 
       #3 Заканчивается память на гостевой системе осталось 10%
       - alert: GuestMemoryAlmostOver10_proc
-        expr: ((pve_memory_usage_bytes / pve_memory_size_bytes) * 100 > 90)
+        expr: ((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 90)
         for: 1h
         labels:
           severity: warning
@@ -70,7 +70,7 @@ groups:
 
       #4 Заканчивается память на гостевой системе осталось 5%
       - alert: GuestMemoryAlmostOver5_proc
-        expr: ((pve_memory_usage_bytes / pve_memory_size_bytes) * 100 > 95)
+        expr: ((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95)
         for: 1h
         labels:
           severity: warning
