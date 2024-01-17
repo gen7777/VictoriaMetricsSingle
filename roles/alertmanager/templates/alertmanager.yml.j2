@@ -23,12 +23,6 @@ route:
   routes:
   - receiver: 'telegram'
     match:
-      alertname: VirtualMachineShutdown
-    repeat_interval: 48h
-    continue: true
-    
-  - receiver: 'telegram'
-    match:
       severity: ^(none|warning|critical)$
     repeat_interval: 24h
     continue: true
@@ -36,11 +30,5 @@ route:
   - receiver: 'null'
     match:
       alertname: Watchdog
-    repeat_interval: 24h
-    continue: true
-
-  - receiver: "null"
-    match:
-      alertname: InfoInhibitor
     repeat_interval: 24h
     continue: true
