@@ -10,6 +10,8 @@ vic_vm_alert_config_dir: "/opt/vic-vmalert"
 vic_vm_alert_rules_config_path: "/opt/vic-vmalert/rules.yml"
 vic_vm_alert_alertmanager_url: "http://localhost:9093"
 vic_vm_alert_datasource_url: "http://localhost:8428"
+vic_vm_alert_remoteWrite_url: "http://localhost:8428"
+vic_vm_alert_remoteRead_url: "http://localhost:8428"
 vic_vm_alert_evaluation_interval: "30s"
 vic_vm_alert_service_args:
   "httpListenAddr": "0.0.0.0:9431"
@@ -17,6 +19,8 @@ vic_vm_alert_service_args:
   "notifier.url": "{{ vic_vm_alert_alertmanager_url }}"
   "rule": "{{ vic_vm_alert_rules_config_path }}"
   "evaluationInterval": "{{ vic_vm_alert_evaluation_interval }}"
+  "remoteWrite.url": "{{ vic_vm_alert_remoteWrite_url }}"
+  "remoteRead.url": "{{ vic_vm_alert_remoteRead_url }}"
 
 vic_vm_alert_max_open_files: 2097152
 
