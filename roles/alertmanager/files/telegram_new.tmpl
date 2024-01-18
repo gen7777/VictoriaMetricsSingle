@@ -30,7 +30,7 @@
 
 {{ else if eq $severity "info" }}ℹ <b>Level:</b> Info
 {{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
-
+{{ end }}
 {{ else }}  Level: ???? <b>{{ $severity }}</b>
 {{ end }}
 
