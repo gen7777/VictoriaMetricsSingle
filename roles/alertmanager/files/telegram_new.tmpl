@@ -1,53 +1,37 @@
 {{ define "telegram.message" }}
 {{ range .Alerts }}
-{{ $severity := .Labels.severity }}
-{{ $alertName := .Labels.alertname }}
-{{ $dc := .Labels.datacenter }}
-{{ $ns := .Labels.namespace }}
-{{ $id := .Labels.id }}
-{{ $inst := .Labels.instance }}
-{{ $summary := .Annotations.summary }}
-{{ $descr := .Annotations.description}}
-{{ $runbook := .Annotations.runbook_url }}
+    {{ $severity := .Labels.severity }}
+    {{ $alertName := .Labels.alertname }}
+    {{ $dc := .Labels.datacenter }}
+    {{ $ns := .Labels.namespace }}
+    {{ $id := .Labels.id }}
+    {{ $inst := .Labels.instance }}
+    {{ $summary := .Annotations.summary }}
+    {{ $descr := .Annotations.description}}
+    {{ $runbook := .Annotations.runbook_url }}
 
-{{ if eq .Status "firing" }}
-<b>{{ $alertName }}</b>
-{{ if eq $severity "critical" }} Level: <b>Critical</b>
-{{ if ne $dc "" }} DataCenter: <b>{{ $dc }}</b> {{ end }}
-{{ if ne $ns "" }} NameSpace: <b>{{ $ns }}</b> {{ end }}
-{{ if ne $inst "" }} Instance: <b>{{ $inst }}</b> {{ end }}
-{{ if ne $id "" }} VM: <b>{{ $id }}</b> {{ end }}
-{{ if ne $descr "" }} Description: </b> <b>{{ $descr }}</b> {{ end }}
-{{ end }}
-
-{{ else if eq $severity "warning" }} Level: <b>Warning</b>
-{{ if ne $dc "" }} DataCenter: <b>{{ $dc }}</b> {{ end }}
-{{ if ne $ns "" }} NameSpace: <b>{{ $ns }}</b> {{ end }}
-{{ if ne $inst "" }} Instance: <b>{{ $inst }}</b> {{ end }}
-{{ if ne $id "" }} VM: <b>{{ $id }}</b> {{ end }}
-{{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
-{{ end }}
-
-{{ else if eq $severity "info" }}ℹ <b>Level:</b> Info
-{{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
-{{ end }}
-{{ else }}  Level: ???? <b>{{ $severity }}</b>
-{{ end }}
-
-{{ else }}
-<b>{{ $alertName }}</b>
-{{if eq $severity "critical"}}
-Level: <b>Critical</b>
-Description: <b>{{ $descr }}</b>
-
-{{ else if eq $severity "warning" }}
-Level: <b>warning</b>
-Description: <b>{{ $descr }}</b>
-{{ else if eq $severity "info" }}
-Level: <b>info</b>
-Description: <b>{{ $descr }}</b>
-{{ else }}
-Level: ???? <b>{{ $severity }}</b>
-{{ end }}
+    {{ if eq .Status "firing" }}
+        <b>{{ $alertName }}</b>
+        {{ if eq $severity "critical" }}
+            Level: <b>Critical</b>
+            {{ if ne $dc "" }} DataCenter: <b>{{ $dc }}</b> {{ end }}
+            {{ if ne $ns "" }} NameSpace: <b>{{ $ns }}</b> {{ end }}
+            {{ if ne $inst "" }} Instance: <b>{{ $inst }}</b> {{ end }}
+            {{ if ne $id "" }} VM: <b>{{ $id }}</b> {{ end }}
+            {{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
+        {{ else if eq $severity "warning" }}
+            Level: <b>Warning</b>
+            {{ if ne $dc "" }} DataCenter: <b>{{ $dc }}</b> {{ end }}
+            {{ if ne $ns "" }} NameSpace: <b>{{ $ns }}</b> {{ end }}
+            {{ if ne $inst "" }} Instance: <b>{{ $inst }}</b> {{ end }}
+            {{ if ne $id "" }} VM: <b>{{ $id }}</b> {{ end }}
+            {{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
+        {{ else if eq $severity "info" }}
+            Level: <b>Info</b>
+            {{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
+        {{ end }}
+    {{ else }}
+        Level: ???? <b>{{ $severity }}</b>
+    {{ end }}
 {{ end }}
 {{ end }}

@@ -29,7 +29,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: "{% raw %}Filesystem on {{ $labels.id }} at {{ $labels.instance }} has only {{ printf $value }}% available space left.{% endraw %}"
+          description: "{% raw %}Filesystem  has only {{ printf $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
 
       #2 Заканчивается память на гостевой системе осталось 5%
@@ -39,8 +39,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}memory {{ $labels.id }} is almost gone  {{ $labels.instance }}{% endraw %}"
-          summary: "{% raw %}The memory on {{ $labels.id }} is almost gone{% endraw %}"
+          description: "{% raw %}The memory is almost gone {% endraw %}"
+          summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #3 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
@@ -48,8 +48,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}The virtual machine {{ $labels.id }} has been restarted {{ $labels.instance }} .{% endraw %}"
-          summary: "{% raw %}Virtual machine  {{ $labels.id }} has restarted.{% endraw %}"
+          description: "{% raw %}The virtual machine  has been restarted  .{% endraw %}"
+          summary: "{% raw %}Virtual machine  has restarted.{% endraw %}"
 
       #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
@@ -58,8 +58,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}The virtual machine {{ $labels.id }} has been shutdown {{ $labels.instance }}.{% endraw %}"
-          summary: "{% raw %}Virtual machine  {{ $labels.id }} has been shutdown.{% endraw %}"
+          description: "{% raw %}The virtual machine  has been shutdown .{% endraw %}"
+          summary: "{% raw %}Virtual machine  has been shutdown.{% endraw %}"
 
       #5 На гостевой виртуальной машине загрузка процессора максимальна
       - alert: GuestHighCpuUsage
@@ -68,8 +68,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          description: "{% raw %}High CPU usage on guest virtual machine {{ $labels.instance }}. Current usage {{ printf $value }}%.{% endraw %}"
-          summary: "{% raw %}CPU usage on guest virtual machine {{ $labels.instance }} is above the threshold.{% endraw %}"
+          description: "{% raw %}High CPU usage on guest virtual machine . Current usage {{ printf $value }}%.{% endraw %}"
+          summary: "{% raw %}CPU usage on guest virtual machine  is above the threshold.{% endraw %}"
 
   - name: node-exporter.rules
     rules:
