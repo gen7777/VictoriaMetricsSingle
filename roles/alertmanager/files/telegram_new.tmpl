@@ -32,6 +32,11 @@
         {{ end }}
     {{ else }}
         Level: ???? <b>{{ $severity }}</b>
+        {{ if ne $dc "" }} DataCenter: <b>{{ $dc }}</b> {{ end }}
+        {{ if ne $ns "" }} NameSpace: <b>{{ $ns }}</b> {{ end }}
+        {{ if ne $inst "" }} Instance: <b>{{ $inst }}</b> {{ end }}
+        {{ if ne $id "" }} VM: <b>{{ $id }}</b> {{ end }}
+        {{ if ne $descr "" }} Description: <b>{{ $descr }}</b> {{ end }}
     {{ end }}
 {{ end }}
 {{ end }}
