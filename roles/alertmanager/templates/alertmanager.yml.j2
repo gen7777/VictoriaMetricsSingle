@@ -16,6 +16,8 @@ receivers:
       parse_mode: 'HTML'
 route:
   receiver: 'telegram'
+  group_wait: 1m
+  group_interval: 2m
   group_by:
     - severity
     - alertname
