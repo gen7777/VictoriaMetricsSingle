@@ -16,7 +16,7 @@
 
 - name: Create tmpl file
   ansible.builtin.copy:
-    src: telegram_new.tmpl
+    src: telegram.tmpl
     dest: "{{ alertmanager_config_dir }}"
 
 - name: Reload systemd daemon
