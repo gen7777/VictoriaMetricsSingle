@@ -1,6 +1,6 @@
 ---
 - name: Install and configure karma
   become: true
-  hosts: server
+  hosts: monitoring
   roles:
     - karma

@@ -1,24 +1,8 @@
 ---
 - name: Setup VM single
   become: true
-  hosts: server
+  hosts: monitoring
   roles:
     - single
-
-- name: Setup VM agent
-  become: true
-  hosts: server
-  roles:
     - vmagent
-
-- name: Setup node-exporter
-  become: true
-  hosts: node-exporter
-  roles:
-    - node_exporter
-
-- name: Setup VMalert
-  become: true
-  hosts: server
-  roles:
     - vmalert

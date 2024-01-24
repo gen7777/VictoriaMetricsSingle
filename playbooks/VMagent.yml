@@ -1,6 +1,6 @@
 ---
 - name: Setup VM agent
   become: true
-  hosts: server
+  hosts: monitoring
   roles:
     - vmagent

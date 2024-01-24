@@ -1,6 +1,6 @@
 ---
-- name: Setup VM agent
+- name: Setup Grafana dashboard
   become: true
-  hosts: server
+  hosts: monitoring
   roles:
     - grafana_dashboard

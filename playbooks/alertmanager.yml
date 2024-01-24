@@ -1,6 +1,6 @@
 ---
-- name: Setup VM agent
+- name: Setup alertmanager
   become: true
-  hosts: server
+  hosts: monitoring
   roles:
     - alertmanager
