@@ -24,7 +24,7 @@ groups:
     rules:
       #1 Проверка на остаток места на файловой системе ноды осталось 3%
       - alert: GuestFilesystemAlmostOutOfSpace
-        expr: ((pve_disk_usage_bytes{instance="172.19.19.41:9221"} / pve_disk_size_bytes) * 100 > 97)
+        expr: (((pve_disk_usage_bytes{instance="172.19.19.41:9221"} / pve_disk_size_bytes) * 100 > 97) * on(id, instance, job) group_left(name) pve_guest_info)
         for: 30m
         labels:
           severity: critical
@@ -34,7 +34,7 @@ groups:
 
       #2 Заканчивается память на гостевой системе осталось 5%
       - alert: GuestMemoryAlmostOver5_proc
-        expr: ((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95)
+        expr: (((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95) * on(id, instance, job) group_left(name) pve_guest_info)
         for: 1h
         labels:
           severity: warning
@@ -44,7 +44,7 @@ groups:
 
       #3 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
-        expr: pve_uptime_seconds{instance="172.19.19.41:9221"} < 300 AND pve_up!=0
+        expr: (pve_uptime_seconds{instance="172.19.19.41:9221"} < 300 AND pve_up!=0 * on(id, instance, job) group_left(name) pve_guest_info)
         labels:
           severity: warning
         annotations:
@@ -53,7 +53,7 @@ groups:
 
       #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: (count(pve_up{instance="172.19.19.41:9221"} == 0)-count((pve_up{instance="172.19.19.41:9221"} == 0)offset 24h)) !=0
+        expr:  (count(pve_up{instance="172.19.19.41:9221"} == 0) > count((pve_up == 0) offset 24h) * on(id, instance, job) group_left(name) pve_guest_info)
         for: 
         labels:
           severity: warning
@@ -63,7 +63,7 @@ groups:
 
       #5 На гостевой виртуальной машине загрузка процессора максимальна
       - alert: GuestHighCpuUsage
-        expr: (pve_cpu_usage_ratio{instance="172.19.19.41:9221"} * 100) > 95
+        expr: ((pve_cpu_usage_ratio{instance="172.19.19.41:9221"} * 100) > 95 * on(id, instance, job) group_left(name) pve_guest_info)
         for: 30m
         labels:
           severity: critical

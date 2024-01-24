@@ -1,6 +1,6 @@
 ---
 - name: Setup alertmanager
   become: true
-  hosts: monitoring
+  hosts: server
   roles:
     - alertmanager

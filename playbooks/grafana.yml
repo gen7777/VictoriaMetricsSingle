@@ -1,7 +1,7 @@
 ---
 - name: Setup Grafana
   become: true
-  hosts: monitoring
+  hosts: server
   roles:
     - grafana
     - grafana_dashboard

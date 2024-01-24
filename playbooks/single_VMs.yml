@@ -1,7 +1,7 @@
 ---
 - name: Setup VM single
   become: true
-  hosts: monitoring
+  hosts: server
   roles:
     - single
     - vmagent
