@@ -19,9 +19,6 @@
     src: "{{ blackbox_exporter_install_dir }}blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}/blackbox_exporter"
     dest: "{{ blackbox_exporter_working_dir }}"
     remote_src: yes
-    owner: "{{ blackbox_exporter_system_user }}"
-    group: "{{ blackbox_exporter_system_group }}"
-    mode: '0755'
 
 - name: copy blackbox.yml
   ansible.builtin.copy:
