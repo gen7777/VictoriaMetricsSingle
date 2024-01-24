@@ -1,0 +1,19 @@
+---
+# defaults file for blackbox
+blackbox_exporter_version: "0.24.0"
+
+blackbox_exporter_repo: "prometheus/blackbox_exporter"
+
+blackbox_exporter_binary_local_dir: ""
+blackbox_exporter_binary_url: "https://github.com/{{ blackbox_exporter_repo }}/releases/download/v{{ blackbox_exporter_version }}/blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+
+blackbox_exporter_system_user: "blackbox"
+blackbox_exporter_system_group: "{{ blackbox_exporter_system_user }}"
+
+blackbox_exporter_install_dir: "/opt/"
+blackbox_exporter_working_dir: "/usr/local/bin/"
+blackbox_exporter_config_dir: "/etc/blackbox/"
+blackbox_exporter_config: "{{ blackbox_exporter_config_dir }}blackbox.yml"
+   
+blackbox_exporter_web_listen_address: "0.0.0.0"
+blackbox_exporter_web_listen_port: "9115"

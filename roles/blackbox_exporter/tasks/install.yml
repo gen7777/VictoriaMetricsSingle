@@ -1,0 +1,38 @@
+---
+- name: Download blackbox_exporter binary to local folder
+  become: false
+  ansible.builtin.get_url:
+    url: "{{ blackbox_exporter_binary_url }}"
+    dest: "/tmp/blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+    
+- name: Extract blackbox_exporter tarball
+  ansible.builtin.unarchive:
+    src: "/tmp/blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+    dest: "{{ blackbox_exporter_install_dir }}"
+    remote_src: yes
+    owner: "{{ blackbox_exporter_system_user }}"
+    group: "{{ blackbox_exporter_system_group }}"
+    mode: '0755'
+
+- name: copy blackbox_exporter
+  ansible.builtin.copy:
+    src: "{{ blackbox_exporter_install_dir }}blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}/blackbox_exporter"
+    dest: "{{ blackbox_exporter_working_dir }}"
+    remote_src: yes
+    owner: "{{ blackbox_exporter_system_user }}"
+    group: "{{ blackbox_exporter_system_group }}"
+    mode: '0755'
+
+- name: copy blackbox.yml
+  ansible.builtin.copy:
+    src: "{{ blackbox_exporter_install_dir }}blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}/blackbox.yml"
+    dest: "{{ blackbox_exporter_config_dir }}"
+    remote_src: yes
+    owner: "{{ blackbox_exporter_system_user }}"
+    group: "{{ blackbox_exporter_system_group }}"
+    mode: '0755'
+
+- name: Remove blackbox_exporter tarball
+  ansible.builtin.file:
+    path: "/tmp/blackbox_exporter-{{ blackbox_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+    state: absent

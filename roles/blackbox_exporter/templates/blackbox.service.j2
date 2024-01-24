@@ -1,0 +1,20 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Blackbox Exporter Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ blackbox_exporter_system_user }}
+Group={{ blackbox_exporter_system_group }}
+Restart=always
+WorkingDirectory={{ blackbox_exporter_working_dir }}
+ExecStart={{ blackbox_exporter_working_dir }}blackbox_exporter \
+   --config.file={{ blackbox_exporter_config }} \
+   --web.listen-address="{{ blackbox_exporter_web_listen_address }}:{{ blackbox_exporter_web_listen_port }}"
+
+
+[Install]
+WantedBy=multi-user.target

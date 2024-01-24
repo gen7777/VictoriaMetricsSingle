@@ -1,0 +1,6 @@
+---
+- name: Setup blackbox_exporter
+  become: true
+  hosts: server
+  roles:
+    - blackbox_exporter

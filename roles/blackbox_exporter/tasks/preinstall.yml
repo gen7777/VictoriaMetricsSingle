@@ -1,0 +1,53 @@
+---
+- name: Check if blackbox_exporter is installed
+  ansible.builtin.stat:
+    path: "{{ blackbox_exporter_config_dir }}"
+  changed_when: false
+  check_mode: false
+  register: blackbox_exporter_is_installed
+
+- name: Check current blackbox_exporter version
+  ansible.builtin.command: "/usr/local/bin/blackbox_exporter/blackbox_exporter --version"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: blackbox_exporter_current_version
+  when: blackbox_exporter_is_installed.stat.exists | bool
+
+- name: Create blackbox_exporter system group
+  ansible.builtin.group:
+    name: "{{ blackbox_exporter_system_group }}"
+    state: present
+    system: true
+  when: blackbox_exporter_system_group != "root"
+
+- name: Create blackbox_exporter system user
+  ansible.builtin.user:
+    name: "{{ blackbox_exporter_system_user }}"
+    groups: "{{ blackbox_exporter_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+  when: blackbox_exporter_system_user != "root"
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ blackbox_exporter_install_dir }}"
+    - "{{ blackbox_exporter_working_dir }}"
+    - "{{ blackbox_exporter_config_dir }}"
+
+
+- name: owner directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ blackbox_exporter_system_user }}"
+    group: "{{ blackbox_exporter_system_group }}"
+    recurse: yes
+  with_items:
+    - "{{ blackbox_exporter_install_dir }}"
+    - "{{ blackbox_exporter_working_dir }}"
+    - "{{ blackbox_exporter_config_dir }}"

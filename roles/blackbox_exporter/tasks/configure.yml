@@ -1,0 +1,15 @@
+---
+- name: Create blackbox_exporter service file
+  ansible.builtin.template:
+    src: blackbox.service.j2
+    dest: /etc/systemd/system/blackbox.service
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable blackbox_exporter service
+  ansible.builtin.service:
+    name: blackbox
+    enabled: yes
+    state: started
