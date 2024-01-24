@@ -49,5 +49,4 @@
     recurse: yes
   with_items:
     - "{{ blackbox_exporter_install_dir }}"
-    - "{{ blackbox_exporter_working_dir }}"
     - "{{ blackbox_exporter_config_dir }}"
