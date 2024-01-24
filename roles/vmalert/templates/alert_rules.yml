@@ -54,7 +54,7 @@ groups:
       #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
         expr:  (count(pve_up{instance="172.19.19.41:9221"} == 0) > count((pve_up == 0) offset 24h) * on(id, instance, job) group_left(name) pve_guest_info)
-        for: 
+        for: 1h
         labels:
           severity: warning
         annotations:
