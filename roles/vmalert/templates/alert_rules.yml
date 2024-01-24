@@ -13,7 +13,7 @@ groups:
       #2 Этот алерт проверяет доступность Targets и срабатывет при падении любого.
       - alert: TargetDown
         annotations:
-          description: "{% raw %}{{ $value }}% of the {{ $labels.job }}/{{$labels.service }} targets in {{ $labels.namespace }} {{ $labels.name }} are down.{% endraw %}"
+          description: "{% raw %}{{ $value }}% of the {{ $labels.job }}/{{$labels.service }} targets in {{ $labels.namespace }} namespace are down.{% endraw %}"
           summary: "{% raw %}Один или несколько targets недоступен.{% endraw %}"
         expr: 100 * (count(up == 0) BY (datacenter, job, namespace, service) / count(up) BY (datacenter, job, namespace, service)) > 10
         for: 10m
@@ -39,7 +39,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}The memory  {{ $labels.name }} is almost gone {% endraw %}"
+          description: "{% raw %}The memory is almost gone {% endraw %}"
           summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #3 Гостевая виртуальная машина перезагружена
@@ -48,17 +48,17 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}The virtual machine {{ $labels.name }} has been restarted  .{% endraw %}"
+          description: "{% raw %}The virtual machine  has been restarted  .{% endraw %}"
           summary: "{% raw %}Virtual machine  has restarted.{% endraw %}"
 
       #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: count(pve_up{instance="172.19.19.41:9221"} == 0) > count((pve_up{instance="172.19.19.41:9221"} == 0) offset 24h)
-        for: 30m
+        expr: (count(pve_up{instance="172.19.19.41:9221"} == 0)-count((pve_up{instance="172.19.19.41:9221"} == 0)offset 24h)) !=0
+        for: 
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}The virtual machine {{ $labels.name }} has been shutdown .{% endraw %}"
+          description: "{% raw %}The virtual machine  has been shutdown .{% endraw %}"
           summary: "{% raw %}Virtual machine  has been shutdown.{% endraw %}"
 
       #5 На гостевой виртуальной машине загрузка процессора максимальна
@@ -80,7 +80,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: "{% raw %}Filesystem on {{ $labels.name }} {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up.{% endraw %}"
+          description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of space within the next 24 hours.{% endraw %}"
       #2 Проверка на остаток места на файловой системе ноды плюс прогнозирование окончания места в 4 часа
       - alert: NodeFilesystemSpaceFillingUp
