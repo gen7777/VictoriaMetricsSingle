@@ -19,6 +19,59 @@ groups:
         for: 10m
         labels:
           severity: warning
+  
+  - name: blackbox.rules
+    rules:
+      #1 Blackbox probe failed
+      - alert: BlackboxProbeFailed
+        expr: probe_success == 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %}Blackbox probe failed (instance {{ $labels.instance }}){% raw %}"
+          description: "{% raw %}Probe failed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+
+      #2 Blackbox probe HTTP failure
+      - alert: BlackboxProbeHttpFailure
+        expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %}Blackbox probe HTTP failure (instance {{ $labels.instance }}){% raw %}"
+          description: "{% raw %}HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+
+      #3 Blackbox SSL certificate will expire soon SSL certificate expires in less than 20 days
+      - alert: BlackboxSslCertificateWillExpireSoon
+        expr: 3 <= round((last_over_time(probe_ssl_earliest_cert_expiry[10m]) - time()) / 86400, 0.1) < 20
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% raw %}"
+          description: "{% raw %}SSL certificate expires in less than 20 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+
+
+      #4 Blackbox SSL certificate will expire soon SSL certificate expires in less than 3 days
+      - alert: BlackboxSslCertificateWillExpireSoon
+        expr: 0 <= round((last_over_time(probe_ssl_earliest_cert_expiry[10m]) - time()) / 86400, 0.1) < 3
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% raw %}"
+          description: "{% raw %}SSL certificate expires in less than 3 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+     
+      #5 Blackbox SSL certificate will expire soon SSL certificate expires in less than 0 days
+      - alert: BlackboxSslCertificateExpired
+        expr: round((last_over_time(probe_ssl_earliest_cert_expiry[10m]) - time()) / 86400, 0.1) < 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{% raw %}Blackbox SSL certificate expired (instance {{ $labels.instance }}){% raw %}"
+          description: "{% raw %}SSL certificate has expired already\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
 
   - name: pve-exporter.rules
     rules:

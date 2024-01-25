@@ -1,6 +1,6 @@
 ---
 # defaults file for karma
-alertmanager_version: "0.24.0"
+alertmanager_version: "0.26.0"
 ansible_user: "vagrant"
 
 alertmanager_repo: "prometheus/alertmanager"
