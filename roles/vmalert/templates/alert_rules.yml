@@ -105,14 +105,14 @@ groups:
           summary: "{% raw %}Virtual machine  has restarted.{% endraw %}"
 
       #4 Гостевая виртуальная машина выключена
-      - alert: VirtualMachineShutdown
-        expr:  ((count(pve_up == 0) - count(pve_up == 0 offset 24h)) != 0 * on(id, instance, job) group_left(name) pve_guest_info)
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          description: "{% raw %}The virtual machine  has been shutdown .{% endraw %}"
-          summary: "{% raw %}Virtual machine  has been shutdown.{% endraw %}"
+#      - alert: VirtualMachineShutdown
+#        expr:  ((count(pve_up == 0) - count(pve_up == 0 offset 24h))!= 0 * on(id, instance, job) group_left(name) pve_guest_info)
+#        for: 5m
+#        labels:
+#          severity: warning
+#        annotations:
+#          description: "{% raw %}The virtual machine  has been shutdown .{% endraw %}"
+#          summary: "{% raw %}Virtual machine  has been shutdown.{% endraw %}"
 
       #5 На гостевой виртуальной машине загрузка процессора максимальна
       - alert: GuestHighCpuUsage
