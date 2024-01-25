@@ -16,7 +16,7 @@
 
 - name: copy alertmanager
   ansible.builtin.copy:
-    src: "{{ alertmanager_install_dir }}alertmanager-0.24.0.linux-amd64/alertmanager"
+    src: "{{ alertmanager_install_dir }}alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager"
     dest: /usr/local/bin/
     remote_src: yes
     owner: "{{ alertmanager_system_user }}"
@@ -25,7 +25,7 @@
 
 - name: copy amtool
   ansible.builtin.copy:
-    src: "{{ alertmanager_install_dir }}alertmanager-0.24.0.linux-amd64/amtool"
+    src: "{{ alertmanager_install_dir }}alertmanager-{{ alertmanager_version }}.linux-amd64/amtool"
     dest: /usr/local/bin/
     remote_src: yes
     owner: "{{ alertmanager_system_user }}"
