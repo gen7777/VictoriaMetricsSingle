@@ -29,8 +29,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{% raw %}Blackbox probe failed (instance {{ $labels.instance }}){% raw %}"
-          description: "{% raw %}Probe failed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+          summary: "{% raw %}Blackbox probe failed (instance {{ $labels.instance }}){% endraw %}"
+          description: "{% raw %}Probe failed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
 
       #2 Blackbox probe HTTP failure
       - alert: BlackboxProbeHttpFailure
@@ -39,8 +39,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{% raw %}Blackbox probe HTTP failure (instance {{ $labels.instance }}){% raw %}"
-          description: "{% raw %}HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+          summary: "{% raw %}Blackbox probe HTTP failure (instance {{ $labels.instance }}){% endraw %}"
+          description: "{% raw %}HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
 
       #3 Blackbox SSL certificate will expire soon SSL certificate expires in less than 20 days
       - alert: BlackboxSslCertificateWillExpireSoon
@@ -49,8 +49,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% raw %}"
-          description: "{% raw %}SSL certificate expires in less than 20 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% endraw %}"
+          description: "{% raw %}SSL certificate expires in less than 20 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
 
 
       #4 Blackbox SSL certificate will expire soon SSL certificate expires in less than 3 days
@@ -60,8 +60,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% raw %}"
-          description: "{% raw %}SSL certificate expires in less than 3 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+          summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% endraw %}"
+          description: "{% raw %}SSL certificate expires in less than 3 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
      
       #5 Blackbox SSL certificate will expire soon SSL certificate expires in less than 0 days
       - alert: BlackboxSslCertificateExpired
@@ -70,8 +70,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{% raw %}Blackbox SSL certificate expired (instance {{ $labels.instance }}){% raw %}"
-          description: "{% raw %}SSL certificate has expired already\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% raw %}"
+          summary: "{% raw %}Blackbox SSL certificate expired (instance {{ $labels.instance }}){% endraw %}"
+          description: "{% raw %}SSL certificate has expired already\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
 
   - name: pve-exporter.rules
     rules:
