@@ -95,15 +95,15 @@ groups:
           description: "{% raw %}Filesystem  has only {{ printf $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
 
-      #2 Заканчивается память на гостевой системе осталось 5%
-      - alert: GuestMemoryAlmostOver5_proc
-        expr: (((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95) * on(id, instance, job) group_left(name) pve_guest_info)
-        for: 1h
-        labels:
-          severity: warning
-        annotations:
-          description: "{% raw %}The memory is almost gone {% endraw %}"
-          summary: "{% raw %}The memory is almost gone{% endraw %}"
+#      #2 Заканчивается память на гостевой системе осталось 5%
+#      - alert: GuestMemoryAlmostOver5_proc
+#        expr: (((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95) * on(id, instance, job) group_left(name) pve_guest_info)
+#        for: 1h
+#        labels:
+#          severity: warning
+#        annotations:
+#          description: "{% raw %}The memory is almost gone {% endraw %}"
+#          summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #3 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
@@ -116,8 +116,8 @@ groups:
 
       #4 Гостевая виртуальная машина выключена
       - alert: VirtualMachineShutdown
-        expr: changes(pve_up{instance="172.19.19.43:9221"}[24h]) >=1
-        for: 5m
+        expr: changes(pve_up{instance="172.19.19.43:9221"}[24h]) >=2
+        for: 5h
         labels:
           severity: warning
         annotations:
