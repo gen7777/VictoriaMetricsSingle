@@ -1,7 +1,8 @@
 ---
-# defaults file for karma
+# defaults file for alertmanager
 alertmanager_version: "0.26.0"
-ansible_user: "vagrant"
+ansible_user: "dpetrenko"
+
 
 alertmanager_repo: "prometheus/alertmanager"
 
@@ -19,5 +20,5 @@ alertmanager_config: "{{ alertmanager_config_dir }}alertmanager.yml"
 alertmanager_web_listen_address: "0.0.0.0"
 alertmanager_web_listen_port: "9093"
 
-bot_token: "6939376271:AAEp_3I0Eq4zD_QIs4efPzFeX2rklw-HsiY"
-chat_id: "-1001520211719"
+bot_token: "6827051149:AAGStANY-m0pd9682elsRyHCq5ORwqeU-8o"
+chat_id: "-1002003576877"

@@ -1,11 +1,13 @@
 [server]
-vm-single ansible_host=192.168.10.3
+vm-single ansible_host=172.17.2.243
 [node_exporter]
-pve1 ansible_host=192.168.10.10
-pve2 ansible_host=192.168.10.15
-vm-single ansible_host=192.168.10.3
-pve ansible_host=192.168.0.55
+vm-single ansible_host=172.17.2.243
+vm156 ansible_host=172.19.11.115
+vm157 ansible_host=172.19.11.119
+pve1 ansible_host=172.19.19.41
+pve2 ansible_host=172.19.19.42
+pve3 ansible_host=172.19.19.43
 [pve_exporter]
-pve2 ansible_host=192.168.10.15
-pve ansible_host=192.168.0.55
-pve1 ansible_host=192.168.10.10
+pve1 ansible_host=172.19.19.41
+pve2 ansible_host=172.19.19.42
+pve3 ansible_host=172.19.19.43

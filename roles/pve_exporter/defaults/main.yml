@@ -18,5 +18,5 @@ pve_exporter_web_listen_address: "0.0.0.0:9221"
 pve_exporter_web_telemetry_path: "/pve"
 
 pve_user: pve_exporter@pve
-pve_password: 123qwe
+pve_password: rLCS&2E&D
 pve_verify_ssl: false

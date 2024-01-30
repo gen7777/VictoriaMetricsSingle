@@ -1,5 +1,5 @@
 ---
-vic_vm_alert_version: "v1.95.0"
+vic_vm_alert_version: "v1.96.0"
 
 vic_vm_alert_repo_url: "https://github.com/VictoriaMetrics/VictoriaMetrics"
 vic_vm_alert_platform: "{% if vic_vm_alert_version.replace('v', '') is version('1.79.0', '>=') %}-linux{% endif %}"
@@ -8,10 +8,10 @@ vic_vm_alert_system_user: "vic_vm_alert"
 vic_vm_alert_system_group: "{{ vic_vm_alert_system_user }}"
 vic_vm_alert_config_dir: "/opt/vic-vmalert"
 vic_vm_alert_rules_config_path: "/opt/vic-vmalert/rules.yml"
-vic_vm_alert_alertmanager_url: "http://localhost:9093"
-vic_vm_alert_datasource_url: "http://localhost:8428"
-vic_vm_alert_remoteWrite_url: "http://localhost:8428"
-vic_vm_alert_remoteRead_url: "http://localhost:8428"
+vic_vm_alert_alertmanager_url: "http://172.17.2.243:9093"
+vic_vm_alert_datasource_url: "http://172.17.2.243:8428"
+vic_vm_alert_remoteWrite_url: "http://172.17.2.243:8428"
+vic_vm_alert_remoteRead_url: "http://172.17.2.243:8428"
 vic_vm_alert_evaluation_interval: "30s"
 vic_vm_alert_service_args:
   "httpListenAddr": "0.0.0.0:9431"
