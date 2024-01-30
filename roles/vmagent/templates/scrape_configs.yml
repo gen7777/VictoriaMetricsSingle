@@ -3,27 +3,28 @@ scrape_configs:
   - job_name: vmagent
     static_configs:
       - targets:
-          - "localhost:8429"
+          - "172.17.2.243:8429"
   - job_name: VM_single
     static_configs:
       - targets:
-          - "127.0.0.1:8428"
+          - "172.17.2.243:8428"
   - job_name: node-exporter
     static_configs:
       - targets:
-          - "192.168.10.3:9100"
-          - "192.168.10.10:9100"
-          - "192.168.0.55:9100"
+          - "172.19.19.41:9100"
+          - "172.19.19.42:9100"
+          - "172.19.19.43:9100"
+          - "172.17.2.243:9100"
   - job_name: vic-vmalert
     static_configs:
       - targets:
-          - "192.168.10.3:9431"
+          - "172.17.2.243:9431"
   - job_name: "pve"
     static_configs:
       - targets:
-          - 192.168.10.10:9221 # Proxmox VE node with PVE exporter.
-          - 192.168.10.15:9221 #PVE2
-          - 192.168.0.55:9221 #PVE
+          - "172.19.19.41:9221"
+          - "172.19.19.42:9221"
+          - "172.19.19.43:9221"
     metrics_path: /pve
   - job_name: blackbox
     metrics_path: /probe
@@ -31,11 +32,27 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-        - https://ya.ru
+        - https://registry.neomsa.ru
+        - https://id.neoflex.ru
+        - http://psa.neoflex.ru/
+#        - http://argocd.neoflex.ru:8080/healthz/
+        - http://argo-prod.neoflex.ru/
+        - http://hasura.neoflex.ru/
+        - http://hasura-preprod.neoflex.ru/
+#        - http://metrics.neoflex.ru/
+        - http://prometheus-metrics.neoflex.ru/
+        - http://mobile-neoportal-new.neoflex.ru/
+        - http://mobile-neoportal.neoflex.ru/
+#        - http://files.neoflex.ru/
+#        - http://s3-adapter.neoflex.ru/
+        - http://invite.neoflex.ru/
+        - http://neoforms.neoflex.ru/
+
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.10.3:9115
+        replacement: 172.17.2.243:9115
+
