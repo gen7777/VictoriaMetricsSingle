@@ -18,4 +18,4 @@ karma_config: "{{ karma_config_dir }}karma.yml"
 karma_web_listen_address: "127.0.0.1"
 karma_web_listen_port: "8080"
 
-karma_alertmanager_address: "http://192.168.10.3:9093"
+karma_alertmanager_address: "http://172.17.2.243:9093"
