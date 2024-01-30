@@ -15,7 +15,7 @@ karma_working_dir: "/var/lib/prometheus/alertmanager"
 karma_config_dir: "/etc/prometheus/"
 karma_config: "{{ karma_config_dir }}karma.yml"
    
-karma_web_listen_address: "0.0.0.0"
+karma_web_listen_address: "127.0.0.1"
 karma_web_listen_port: "8080"
 
 karma_alertmanager_address: "http://192.168.10.3:9093"
