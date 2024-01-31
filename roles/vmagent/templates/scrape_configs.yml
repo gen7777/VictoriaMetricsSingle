@@ -48,7 +48,7 @@ scrape_configs:
         - http://invite.neoflex.ru/
         - http://neoforms.neoflex.ru/
   
-    - job_name: blackbox_dev
+  - job_name: blackbox_dev
     metrics_path: /probe
     params:
       module: [http_2xx]
