@@ -32,8 +32,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-        - https://registry.neomsa.ru
-        - https://id.neoflex.ru
+##        - https://registry.neomsa.ru
+##        - https://id.neoflex.ru
         - http://psa.neoflex.ru/
 #        - http://argocd.neoflex.ru:8080/healthz/
         - http://argo-prod.neoflex.ru/
@@ -41,8 +41,8 @@ scrape_configs:
         - http://hasura-preprod.neoflex.ru/
 #        - http://metrics.neoflex.ru/
         - http://prometheus-metrics.neoflex.ru/
-        - http://mobile-neoportal-new.neoflex.ru/
-        - http://mobile-neoportal.neoflex.ru/
+##        - http://mobile-neoportal-new.neoflex.ru/
+##        - http://mobile-neoportal.neoflex.ru/
 #        - http://files.neoflex.ru/
 #        - http://s3-adapter.neoflex.ru/
         - http://invite.neoflex.ru/
