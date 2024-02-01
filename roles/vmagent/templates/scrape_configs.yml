@@ -41,10 +41,10 @@ scrape_configs:
         - http://hasura-preprod.neoflex.ru/
 #        - http://metrics.neoflex.ru/
         - http://prometheus-metrics.neoflex.ru/
-##        - http://mobile-neoportal-new.neoflex.ru/
-##        - http://mobile-neoportal.neoflex.ru/
-#        - http://files.neoflex.ru/
-#        - http://s3-adapter.neoflex.ru/
+        - http://mobile-neoportal-new.neoflex.ru/
+        - http://mobile-neoportal.neoflex.ru/
+#        - http://files.neoflex.ru/   ### 503 service temporarily unavailable
+#        - http://s3-adapter.neoflex.ru/  ### 503 service temporarily unavailable
         - http://invite.neoflex.ru/
         - http://neoforms.neoflex.ru/
   
