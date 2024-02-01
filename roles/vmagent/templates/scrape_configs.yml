@@ -59,7 +59,7 @@ scrape_configs:
         - https://envrouter.do.neoflex.ru
         - http://argo.do.neoflex.ru/
         - http://dev-junior-report.do.neoflex.ru/
-        - http://kafdrop-dev.do.neoflex.ru
+#        - http://kafdrop-dev.do.neoflex.ru
         - https://id-test-s.neoflex.ru/
         - https://id-test.neoflex.ru/
         - https://id.do.neoflex.ru/
