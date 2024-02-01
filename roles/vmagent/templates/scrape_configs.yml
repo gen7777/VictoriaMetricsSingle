@@ -32,8 +32,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-##        - https://registry.neomsa.ru
-##        - https://id.neoflex.ru
+        - https://registry.neomsa.ru
+        - https://id.neoflex.ru
         - http://psa.neoflex.ru/
 #        - http://argocd.neoflex.ru:8080/healthz/
         - http://argo-prod.neoflex.ru/
