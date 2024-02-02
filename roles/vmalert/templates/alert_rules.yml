@@ -37,7 +37,7 @@ groups:
         expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
         for: 0m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "{% raw %}Blackbox probe HTTP failure (instance {{ $labels.instance }}){% endraw %}"
           description: "{% raw %}HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
@@ -47,7 +47,7 @@ groups:
         expr: 3 <= round((last_over_time(probe_ssl_earliest_cert_expiry[10m]) - time()) / 86400, 0.1) < 20
         for: 0m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% endraw %}"
           description: "{% raw %}SSL certificate expires in less than 20 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
@@ -58,7 +58,7 @@ groups:
         expr: 0 <= round((last_over_time(probe_ssl_earliest_cert_expiry[10m]) - time()) / 86400, 0.1) < 3
         for: 0m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "{% raw %}Blackbox SSL certificate will expire soon (instance {{ $labels.instance }}){% endraw %}"
           description: "{% raw %}SSL certificate expires in less than 3 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
@@ -90,26 +90,26 @@ groups:
         expr: (((pve_disk_usage_bytes{instance="172.19.19.41:9221"} / pve_disk_size_bytes) * 100 > 97) * on(id, instance, job) group_left(name) pve_guest_info)
         for: 30m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           description: "{% raw %}Filesystem  has only {{ printf $value }}% available space left.{% endraw %}"
           summary: "{% raw %}Filesystem has less than 3% space left.{% endraw %}"
 
-#      #2 Заканчивается память на гостевой системе осталось 5%
-#      - alert: GuestMemoryAlmostOver5_proc
-#        expr: (((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95) * on(id, instance, job) group_left(name) pve_guest_info)
-#        for: 1h
-#        labels:
-#          severity: warning
-#        annotations:
-#          description: "{% raw %}The memory is almost gone {% endraw %}"
-#          summary: "{% raw %}The memory is almost gone{% endraw %}"
+      #2 Заканчивается память на гостевой системе осталось 5%
+      - alert: GuestMemoryAlmostOver5_proc
+        expr: (((pve_memory_usage_bytes{instance="172.19.19.41:9221"} / pve_memory_size_bytes) * 100 > 95) * on(id, instance, job) group_left(name) pve_guest_info)
+        for: 1h
+        labels:
+          severity: info
+        annotations:
+          description: "{% raw %}The memory is almost gone {% endraw %}"
+          summary: "{% raw %}The memory is almost gone{% endraw %}"
 
       #3 Гостевая виртуальная машина перезагружена
       - alert: VirtualMachineRestarted
         expr: (pve_uptime_seconds{instance="172.19.19.41:9221"} < 300 AND pve_up!=0 * on(id, instance, job) group_left(name) pve_guest_info)
         labels:
-          severity: warning
+          severity: critical
         annotations:
           description: "{% raw %}The virtual machine  has been restarted  .{% endraw %}"
           summary: "{% raw %}Virtual machine  has restarted.{% endraw %}"
@@ -129,7 +129,7 @@ groups:
         expr: ((pve_cpu_usage_ratio{instance="172.19.19.41:9221"} * 100) > 95 * on(id, instance, job) group_left(name) pve_guest_info)
         for: 30m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           description: "{% raw %}High CPU usage on guest virtual machine . Current usage {{ printf $value }}%.{% endraw %}"
           summary: "{% raw %}CPU usage on guest virtual machine  is above the threshold.{% endraw %}"
@@ -141,7 +141,7 @@ groups:
         expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 15 and predict_linear(node_filesystem_avail_bytes{fstype!="", job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
-          severity: warning
+          severity: info
         annotations:
           description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of space within the next 24 hours.{% endraw %}"
@@ -150,7 +150,7 @@ groups:
         expr: (node_filesystem_avail_bytes{fstype!="", job="node-exporter"} / node_filesystem_size_bytes{fstype!="", job="node-exporter"} * 100 < 10 and predict_linear(node_filesystem_avail_bytes{fstype!="", job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
-          severity: critical
+          severity: warning
         annotations:
           description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available space left and is filling up fast.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of space within the next 4 hours.{% endraw %}"
@@ -177,7 +177,7 @@ groups:
         expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 40 and predict_linear(node_filesystem_files_free{fstype!="", job="node-exporter"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
-          severity: warning
+          severity: info
         annotations:
           description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left and is filling up.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of inodes within the next 24 hours.{% endraw %}"
@@ -186,7 +186,7 @@ groups:
         expr: (node_filesystem_files_free{fstype!="", job="node-exporter"} / node_filesystem_files{fstype!="", job="node-exporter"} * 100 < 20 and predict_linear(node_filesystem_files_free{fstype!="", job="node-exporter"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!="", job="node-exporter"} == 0)
         for: 1h
         labels:
-          severity: critical
+          severity: warning
         annotations:
           description: "{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf  $value }}% available inodes left and is filling up fast.{% endraw %}"
           summary: "{% raw %}Filesystem is predicted to run out of inodes within the next 4 hours.{% endraw %}"
@@ -238,7 +238,7 @@ groups:
       - alert: NodeTextFileCollectorScrapeError
         expr: node_textfile_scrape_error{job="node-exporter"} == 1
         labels:
-          severity: warning
+          severity: info
         annotations:
           description: "{% raw %}Node Exporter  {{ $labels.exported_instance }} text file collector failed to scrape.{% endraw %}"
           summary: "{% raw %}Node Exporter text file collector failed to scrape.{% endraw %}"
@@ -247,7 +247,7 @@ groups:
         expr: (node_timex_offset_seconds{job="node-exporter"} > 0.05 and deriv(node_timex_offset_seconds{job="node-exporter"}[5m]) >= 0) or (node_timex_offset_seconds{job="node-exporter"} < -0.05 and deriv(node_timex_offset_seconds{job="node-exporter"}[5m]) <= 0)
         for: 10m
         labels:
-          severity: warning
+          severity: info
         annotations:
           description: "{% raw %}Clock on {{ $labels.exported_instance }} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.{% endraw %}"
           summary: "{% raw %}Clock skew detected.{% endraw %}"
@@ -256,7 +256,7 @@ groups:
         expr: min_over_time(node_timex_sync_status{job="node-exporter"}[5m]) == 0 and node_timex_maxerror_seconds{job="node-exporter"} >= 16
         for: 10m
         labels:
-          severity: warning
+          severity: info
         annotations:
           description: "{% raw %}Clock on {{ $labels.exported_instance }} is not synchronising. Ensure NTP is configured on this host.{% endraw %}"
           summary: "{% raw %}Clock not synchronising.{% endraw %}"
@@ -275,7 +275,7 @@ groups:
         expr: (node_filefd_allocated{job="node-exporter"} * 100 / node_filefd_maximum{job="node-exporter"} > 90)
         for: 15m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           description: "{% raw %}File descriptors limit at {{ $labels.instance }} is currently at {{ printf $value }}%.{% endraw %}"
           summary: "{% raw %}Kernel is predicted to exhaust file descriptors limit soon.{% endraw %}"
@@ -286,7 +286,7 @@ groups:
       - alert: TooManyRestarts
         expr: changes(process_start_time_seconds{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"}[15m]) > 2
         labels:
-          severity: critical
+          severity: info
         annotations:
           summary: "{% raw %} In {{ $labels.job }} too many restarts (instance {{ $labels.instance }}) {% endraw %}"
           description: "{% raw %}Job {{ $labels.job }} (instance {{ $labels.instance }}) has restarted more than twice in the last 15 minutes. It might be crashlooping.{% endraw %}"
@@ -304,7 +304,7 @@ groups:
         expr: (process_max_fds - process_open_fds) < 100
         for: 5m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "{% raw %} Number of free file descriptors is less than 100 for {{ $labels.job }} {{ $labels.instance }}  for the last 5m {% endraw %}"
           description: "{% raw %} Exhausting OS file descriptors limit can cause severe degradation of the process. Consider to increase the limit as fast as possible. {% endraw %}"
@@ -313,7 +313,7 @@ groups:
         expr: (min_over_time(process_resident_memory_anon_bytes[10m]) / vm_available_memory_bytes) > 0.8
         for: 5m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "{% raw %} It is more than 80% of memory used by {{ $labels.job }} {{ $labels.instance }} {% endraw %}"
           description: "{% raw %} Too high memory usage may result into multiple issues such as OOMs or degraded performance. Consider to either increase available memory or decrease the load on the process. {% endraw %}"
@@ -322,7 +322,7 @@ groups:
         expr: rate(process_cpu_seconds_total[5m]) / process_cpu_cores_available > 0.9
         for: 5m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "{% raw %} More than 90% of CPU is used by  {{ $labels.job }} {{ $labels.instance }}  during the last 5m {% endraw %}"
           description: "{% raw %} Too high CPU usage may be a sign of insufficient resources and make process unstable.  Consider to either increase available CPU resources or decrease the load on the process. {% endraw %}"
@@ -331,28 +331,155 @@ groups:
         expr: sum(increase(vm_log_messages_total{level="error"}[5m])) by (job, instance) > 0
         for: 15m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: "{% raw %} Too many logs printed for job {{ $labels.job }}  ({{ $labels.instance }}) {% endraw %}"
           description: "{% raw %} Logging rate for job {{ $labels.job }}  ({{ $labels.instance }}) is {{ $value }} for last 15m.  Worth to check logs for specific error messages. {% endraw %}"
-
-      - alert: TooManyTSIDMisses
-        expr: sum(rate(vm_missing_tsids_for_metric_id_total[5m])) by (job, instance) > 0
+  - name: ceph.rules
+    rules:
+      - alert: CephTargetDown
+        expr: up{job="ceph"} == 0
         for: 10m
         labels:
           severity: critical
         annotations:
-          summary: "{% raw %} Too many TSID misses for job {{ $labels.job }} ({{ $labels.instance }}){% endraw %}"
-          description: "{% raw %} The rate of TSID misses during query lookups is too high for {{ $labels.job }} ({{ $labels.instance }}) {% endraw %}"
+          description: CEPH target down for more than 2m, please check - it could be a either exporter crash or a whole cluster crash
+          summary: CEPH exporter down
 
-      - alert: ConcurrentInsertsHitTheLimit
-        expr: avg_over_time(vm_concurrent_insert_current[1m]) >= vm_concurrent_insert_capacity
-        for: 15m
+      - alert: CephErrorState
+        expr: ceph_health_status > 1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: Ceph is in Error state longer than 5m, please check status of pools and OSDs
+          summary: CEPH in ERROR
+
+      - alert: CephWarnState
+        expr: ceph_health_status == 1
+        for: 30m
         labels:
           severity: warning
         annotations:
-          summary: "{% raw %} {{ $labels.job }} on instance {{ $labels.instance }} is constantly hitting concurrent inserts limit{% endraw %}"
-          description: "{% raw %} The limit of concurrent inserts on instance {{ $labels.instance }} depends on the number of CPUs. {% endraw %}"
+          description: Ceph is in Warn state longer than 30m, please check status of pools and OSDs
+          summary: CEPH in WARN
+
+      - alert: OsdDown
+        expr: ceph_osd_up == 0
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          description: OSD is down longer than 30 min, please check whats the status
+          summary: OSD down
+
+      - alert: OsdApplyLatencyTooHigh
+        expr: ceph_osd_perf_apply_latency_seconds > 10
+        for: 90s
+        labels:
+          severity: warning
+        annotations:
+          description: OSD latency for {{ $labels.osd }} is too high. Please check if it doesn't stuck in weird state
+          summary: OSD latency too high {{ $labels.osd }}
+
+      - alert: MonitorClockSkewTooHigh
+        expr: abs(ceph_monitor_clock_skew_seconds) > 0.1
+        for: 60s
+        labels:
+          severity: warning
+        annotations:
+          description: Monitor clock skew detected on  {{ $labels.monitor }} - please check ntp and harware clock settins
+          summary: Clock skew detected on {{ $labels.monitor }}
+
+      - alert: MonitorAvailableStorage
+        expr: ceph_monitor_avail_percent < 30
+        for: 60s
+        labels:
+          severity: warning
+        annotations:
+          description: Monitor storage for {{ $labels.monitor }} less than 30% - please check why its too high
+          summary: Nonitor storage for  {{ $labels.monitor }} less than 30%
+
+      - alert: MonitorAvailableStorage
+        expr: ceph_monitor_avail_percent < 15
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          description: Monitor storage for {{ $labels.monitor }} less than 15% - please check why its too high
+          summary: Nonitor storage for  {{ $labels.monitor }} less than 15%
+
+      - alert: CephOSDUtilizatoin
+        expr: ceph_osd_utilization > 90
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          description: Osd free space for  {{ $labels.osd }} is higher tan 90%. Please validate why its so big, reweight or add storage
+          summary: OSD {{ $labels.osd }} is going out of space
+
+      - alert: CephPgDown
+        expr: ceph_pg_down > 0
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          description: Some groups are down (unavailable) for too long on {{ $labels.cluster }}. Please ensure that all the data are available
+          summary: PG DOWN [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephPgIncomplete
+        expr: ceph_pg_incomplete > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          description: Some groups are incomplete (unavailable) for too long on {{ $labels.cluster }}. Please ensure that all the data are available
+          summary: PG INCOMPLETE [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephPgInconsistent
+        expr: ceph_pg_inconsistent > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          description: Some groups are inconsistent for too long on {{ $labels.cluster }}. Data is available but inconsistent across nodes
+          summary: PG INCONSISTENT [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephPgActivating
+        expr: ceph_pg_activating > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: Some groups are activating for too long on {{ $labels.cluster }}. Those PGs are unavailable for too long!
+          summary: PG ACTIVATING [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephPgBackfillTooFull
+        expr: ceph_pg_backfill_toofull > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: Some groups are located on full OSD on cluster {{ $labels.cluster }}. Those PGs can be unavailable shortly. Please check OSDs, change weight or reconfigure CRUSH rules.
+          summary: PG TOO FULL [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephPgUnavailable
+        expr: ceph_pg_total - ceph_pg_active > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: Some groups are unavailable on {{ $labels.cluster }}. Please check their detailed status and current configuration.
+          summary: PG UNAVAILABLE [{{ $value }}] on {{ $labels.cluster }}
+
+      - alert: CephOsdReweighted
+        expr: ceph_osd_weight < 1
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          description: OSD {{ $labels.ceph_daemon}} on cluster {{ $labels.cluster}} was reweighted for too long. Please either create silent or fix that issue
+          summary: OSD {{ $labels.ceph_daemon }} on {{ $labels.cluster }} reweighted - {{ $value }}
 
   - name: vmalert
     rules:
@@ -368,7 +495,7 @@ groups:
         expr: sum(vmalert_alerting_rules_error) by(job, instance, group, file) > 0
         for: 5m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: "{% raw %} Alerting rules are failing for vmalert instance {{ $labels.instance }}{% endraw %}"
           description: "{% raw %} Alerting rules execution is failing for group {{ $labels.group }}. Check vmalert's logs for detailed error message. {% endraw %}"
@@ -377,7 +504,7 @@ groups:
         expr: sum(increase(vmalert_remotewrite_errors_total[5m])) by(job, instance) > 0
         for: 15m
         labels:
-          severity: warning
+          severity: info
         annotations:
           summary: "{% raw %} vmalert instance {{ $labels.instance }} is failing to push metrics to remote write URL {% endraw %}"
           description: "{% raw %} vmalert instance {{ $labels.instance }} is failing to push metrics generated via alerting or recording rules to the configured remote write URL. Check vmalert's logs for detailed error message. {% endraw %}"
