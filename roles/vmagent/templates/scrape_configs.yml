@@ -40,7 +40,7 @@ scrape_configs:
         - http://argo-prod.neoflex.ru/
         - http://hasura.neoflex.ru/
         - http://hasura-preprod.neoflex.ru/ # выдает постоянные ошибки в логе не может распарсить страницу
-        - http://metrics.neoflex.ru/
+#        - http://metrics.neoflex.ru/
         - http://prometheus-metrics.neoflex.ru/
 #        - http://mobile-neoportal-new.neoflex.ru/ ## RBAC: access denied
 #        - http://mobile-neoportal.neoflex.ru/  ## RBAC: access denied
@@ -48,7 +48,6 @@ scrape_configs:
 #        - http://s3-adapter.neoflex.ru/  ### 503 service temporarily unavailable
         - http://invite.neoflex.ru/
         - http://neoforms.neoflex.ru/
-
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -81,7 +80,6 @@ scrape_configs:
         - http://psa-qa1.do.neoflex.ru/
         - http://psa-qa2.do.neoflex.ru/
         - https://test-otp.do.neoflex.ru/
-
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
