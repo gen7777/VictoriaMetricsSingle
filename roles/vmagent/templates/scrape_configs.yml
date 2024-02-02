@@ -38,7 +38,7 @@ scrape_configs:
 #        - http://argocd.neoflex.ru:8080/healthz/
         - http://argo-prod.neoflex.ru/
         - http://hasura.neoflex.ru/
-        - http://hasura-preprod.neoflex.ru/
+#        - http://hasura-preprod.neoflex.ru/ выдает постоянные ошибки в логе не может распарсить страницу
 #        - http://metrics.neoflex.ru/
         - http://prometheus-metrics.neoflex.ru/
 #        - http://mobile-neoportal-new.neoflex.ru/ ## RBAC: access denied
