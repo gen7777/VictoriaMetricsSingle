@@ -26,6 +26,7 @@ scrape_configs:
           - "172.19.19.42:9221"
           - "172.19.19.43:9221"
     metrics_path: /pve
+
   - job_name: blackbox_prod
     metrics_path: /probe
     params:
@@ -47,6 +48,14 @@ scrape_configs:
 #        - http://s3-adapter.neoflex.ru/  ### 503 service temporarily unavailable
         - http://invite.neoflex.ru/
         - http://neoforms.neoflex.ru/
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.17.2.243:9115
   
   - job_name: blackbox_dev
     metrics_path: /probe
