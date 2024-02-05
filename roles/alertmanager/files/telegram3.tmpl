@@ -1,0 +1,16 @@
+{{ define "telegram.message" }}
+{{ range .Alerts }}
+{{ if eq .Status "firing"}}🔥 <b>{{ .Labels.alertname }}</b> 🔥{{ else }}✅ <b>{{ .Labels.alertname }}</b> ✅{{ end }}
+<b>Labels:</b>{{ range $key, $value := .Labels }}{{ if ne $key "alertname" }}
+    {{ $key }}: {{ $value }}{{ end }}{{ end }}
+<b>Annotations:</b>{{ range $key, $value := .Annotations }}
+    {{ $key }}: {{ $value }}{{ end }}
+<b>Dashboard:</b>{{- if eq .Labels.alertgroup "general.rules" }}<a href="https://metrics.neoflex.ru/d/iKcj6tXnq/blackbox-exporter-panel">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "blackbox.rules" }}<a href="https://metrics.neoflex.ru/d/xtkCtBkiz/blackbox-exporter-overview">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "pve-exporter.rules" }}<a href="https://metrics.neoflex.ru/d/Dp7Cd57Zza/proxmox-via-prometheus">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "node-exporter.rules" }}<a href="https://metrics.neoflex.ru/d/rYdddlPWj/node-exporter-full">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "vm-health" }}<a href="https://metrics.neoflex.ru/d/art-victoria/victoriametrics">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "ceph.rules" }}<a href="https://metrics.neoflex.ru/d/vwcB0Bzmk/ceph-cluster">Go to Dashboard</a>{{ end }}
+{{- if eq .Labels.alertgroup "vmalert" }}<a href="https://metrics.neoflex.ru/d/LzldHAVnz/victoriametrics-vmalert">Go to Dashboard</a>{{ end }}
+{{ end }}
+{{ end }}

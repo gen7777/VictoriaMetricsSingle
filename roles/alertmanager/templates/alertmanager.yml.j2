@@ -14,6 +14,17 @@ receivers:
       {% raw %}message:  '{{ template "telegram.message" .}}'
 {% endraw %}
       parse_mode: 'HTML'
+  - name: 'email'
+    email_configs:
+    - to: 'gen777@gmail.com'
+      from: 'test@gmail.com'
+      smarthost: smtp.gmail.com:587
+      auth_username: 'test@gmail.com'
+      auth_identity: 'test@gmail.com'
+      auth_password: 'google-app-password'
+      send_resolved: true
+      {% raw %}message:  '{{ template "email.default.txt.message" .}}'
+{% endraw %}
 route:
   receiver: 'telegram'
   group_by:
@@ -25,7 +36,13 @@ route:
   routes:
   - receiver: 'telegram'
     match:
-      severity: ^(none|warning|critical)$
+      severity: ^(warning|critical)$
+    repeat_interval: 24h
+    continue: true
+
+  - receiver: 'email'
+    match:
+      severity: ^(info)$
     repeat_interval: 24h
     continue: true
 
